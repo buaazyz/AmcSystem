@@ -110,7 +110,7 @@ class CustomerOrder(models.Model):
 
 class COrderDetail(models.Model):
     ono = models.ForeignKey(CustomerOrder, on_delete=models.CASCADE)
-    odno = models.CharField(max_length=10)
+    odno = models.CharField(max_length=10, primary_key=True)
     pno = models.ForeignKey(Product)
     pquat = models.IntegerField()
     # 暂未满足数量，冗余
@@ -118,8 +118,8 @@ class COrderDetail(models.Model):
     dcno = models.ForeignKey(Discount)
     # 冗余
     subAmount = models.FloatField()
-    class Meta:
-        unique_together = ("ono", "odno")
+    # class Meta:
+    #     unique_together = ("ono", "odno")
 
 class ProductCatalog(models.Model):
     fid = models.ForeignKey(Factory)
@@ -145,7 +145,7 @@ class PurchasingOrder(models.Model):
 
 class PurchasingOrderDetail(models.Model):
     pono = models.ForeignKey(PurchasingOrder, on_delete=models.CASCADE)
-    podno = models.CharField(max_length=10)
+    podno = models.CharField(max_length=10, primary_key=True)
     pno = models.ForeignKey(Product)
     pquant = models.IntegerField()
     # 暂未到货数量，冗余
@@ -154,8 +154,8 @@ class PurchasingOrderDetail(models.Model):
     dcno = models.ForeignKey(Discount)
     # 冗余
     subAmount = models.FloatField()
-    class Meta:
-        unique_together = ("pono", "podno")
+    # class Meta:
+    #     unique_together = ("pono", "podno")
 
 class StockUp(models.Model):
     STOCKUP_STATUS = (
@@ -180,11 +180,11 @@ class StockUpDetail(models.Model):
     suno = models.ForeignKey(StockUp, on_delete=models.CASCADE)
     sudno = models.CharField(max_length=10)
     # 对应订单细节
-    ono = models.ForeignKey(COrderDetail.ono)
-    odno = models.ForeignKey(COrderDetail.odno)
-    pno = models.ForeignKey(Inventory.pno)
+    #####
+    odno = models.ForeignKey(COrderDetail)
+    pno = models.ForeignKey(Product)
     # 发货仓库
-    wno = models.ForeignKey(Inventory.wno)
+    wno = models.ForeignKey(Warehouse)
     # 备货数量
     quat = models.IntegerField()
     # 备货细节状态，冗余
@@ -220,11 +220,11 @@ class ReplenishmentDetail(models.Model):
     rno = models.ForeignKey(Replenishment, on_delete=models.CASCADE)
     rdno = models.CharField(max_length=10)
     # 对应采购订单细节
-    pono = models.ForeignKey(PurchasingOrderDetail.pono)
-    podno = models.ForeignKey(PurchasingOrderDetail.podno)
-    pno = models.ForeignKey(Inventory.pno)
+    #####
+    podno = models.ForeignKey(PurchasingOrderDetail)
+    pno = models.ForeignKey(Product)
     # 到货仓库
-    wno = models.ForeignKey(Inventory.wno)
+    wno = models.ForeignKey(Warehouse)
     # 到货数量
     quat = models.IntegerField()
     # 校验状态
@@ -259,3 +259,8 @@ class SupplierReceipt(models.Model):
     # 对应供应商催款单号
     spromptno = models.ForeignKey(SupplierPrompt)
     srdate = models.DateField()
+
+class User(models.Model):
+    name = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    usid = models.ForeignKey(staff, on_delete=models.CASCADE,null = True)
