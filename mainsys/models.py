@@ -57,17 +57,31 @@ class InventoryMgmt(models.Model):
     mgmtno = models.CharField(max_length=10, primary_key=True)
     mgmtDesc = models.CharField(max_length=100)
 
+class StockLevel(models.Model):
+    STOCK_LEVEL = (
+        ('0', 'Sufficiency'),
+        ('1', 'ROP'),
+        ('2', 'Danger'),
+        ('3', 'Shortage')
+    )
+    invtLevel = models.CharField(max_length=1, primary_key=True, choices=STOCK_LEVEL)
+    levelRate = models.FloatField()
+
 class Inventory(models.Model):
     pno = models.ForeignKey(Product)
     wno = models.ForeignKey(Warehouse)
     # 可用库存
     quantity = models.IntegerField()
+    # 已备货库存（已被占用库存），冗余
+    occupiedQuat = models.IntegerField(default=0)
     dailyDemand = models.IntegerField()
     setupCost = models.FloatField()
     holdingCost = models.FloatField()
     leadTime = models.FloatField()
     shortagecost = models.FloatField()
+    isp = models.FloatField()
     mgmtno = models.ForeignKey(InventoryMgmt)
+    level = models.ForeignKey(StockLevel)
     class Meta:
         unique_together = ("pno", "wno")
 
@@ -76,14 +90,14 @@ class Discount(models.Model):
     dcDesc = models.CharField(max_length=100)
     # 折扣率
     dcRate = models.FloatField(default=0.0)
-    # 减免金额
+    # 绝对减免金额
     dcAbs = models.FloatField(default=0.0)
 
 class CustomerOrder(models.Model):
     ORDER_STATUS = (
-        '0', "Unhandled"
-        '1', "Handled but insufficient"
-        '2', "Completely handled"
+        ('0', "Unhandled"),
+        ('1', "Handled but insufficient"),
+        ('2', "Completely handled")
     )
     ono = models.CharField(max_length=10, primary_key=True)
     odate = models.DateField()
@@ -99,6 +113,8 @@ class COrderDetail(models.Model):
     odno = models.CharField(max_length=10)
     pno = models.ForeignKey(Product)
     pquat = models.IntegerField()
+    # 暂未满足数量，冗余
+    remainder = models.IntegerField()
     dcno = models.ForeignKey(Discount)
     # 冗余
     subAmount = models.FloatField()
@@ -113,21 +129,133 @@ class ProductCatalog(models.Model):
         unique_together = ("fid", "pno")
 
 class PurchasingOrder(models.Model):
+    PURCHASINGORDER_STATUS = (
+        ('0', "Undelivered"),
+        ('1', "Delivered but insufficient"),
+        ('2', "Completely delivered")
+    )
     pono = models.CharField(max_length=10, primary_key=True)
     podate = models.DateField()
     deliveryDate = models.DateField()
     fid = models.ForeignKey(Factory)
     # 冗余
     amount = models.FloatField()
+    # 冗余
+    postatus = models.CharField(max_length=1, choices=PURCHASINGORDER_STATUS)
 
 class PurchasingOrderDetail(models.Model):
     pono = models.ForeignKey(PurchasingOrder, on_delete=models.CASCADE)
     podno = models.CharField(max_length=10)
     pno = models.ForeignKey(Product)
     pquant = models.IntegerField()
+    # 暂未到货数量，冗余
+    remainder = models.IntegerField()
     price = models.FloatField()
-    dcDesc = models.CharField(max_length=100, null=True)
+    dcno = models.ForeignKey(Discount)
     # 冗余
     subAmount = models.FloatField()
     class Meta:
         unique_together = ("pono", "podno")
+
+class StockUp(models.Model):
+    STOCKUP_STATUS = (
+        ('0', "Undelivered"),
+        ('1', "Delivered")
+    )
+    suno = models.CharField(max_length=10, primary_key=True)
+    # 对应顾客号，冗余
+    cid = models.ForeignKey(Customer)
+    # 对应订单号，冗余
+    ono = models.ForeignKey(CustomerOrder)
+    sudate = models.DateField()
+    # 发货状态，冗余
+    suStatus = models.CharField(max_length=1, choices=STOCKUP_STATUS, default='0')
+
+class StockUpDetail(models.Model):
+    STOCKUPDETAIL_STATUS = (
+        ('0', "Sufficient"),
+        ('1', "Insufficient"),
+        ('2', "Stock out")
+    )
+    suno = models.ForeignKey(StockUp, on_delete=models.CASCADE)
+    sudno = models.CharField(max_length=10)
+    # 对应订单细节
+    ono = models.ForeignKey(COrderDetail.ono)
+    odno = models.ForeignKey(COrderDetail.odno)
+    pno = models.ForeignKey(Inventory.pno)
+    # 发货仓库
+    wno = models.ForeignKey(Inventory.wno)
+    # 备货数量
+    quat = models.IntegerField()
+    # 备货细节状态，冗余
+    sudStatus = models.CharField(max_length=1, choices=STOCKUPDETAIL_STATUS)
+    class Meta:
+        unique_together = ("suno", "sudno")
+
+class DispatchBill(models.Model):
+    dbno = models.CharField(max_length=10, primary_key=True)
+    # 对应顾客号，冗余
+    cid = models.ForeignKey(Customer)
+    suno = models.ForeignKey(StockUp)
+    dbdate = models.DateField()
+
+class Replenishment(models.Model):
+    REPLENISHMENT_STATUS = (
+        ('0', "Not replenished"),
+        ('1', "Replenished")
+    )
+    rno = models.CharField(max_length=10, primary_key=True)
+    # 冗余
+    pono = models.ForeignKey(PurchasingOrder)
+    rdate = models.DateField()
+    # 入库状态
+    rstatus = models.CharField(max_length=1, choices=REPLENISHMENT_STATUS, default='0')
+
+class ReplenishmentDetail(models.Model):
+    CHECKOUT_STATUS = (
+        ('0', "Unchecked"),
+        ('1', "Qualified"),
+        ('2', "Unqualified")
+    )
+    rno = models.ForeignKey(Replenishment, on_delete=models.CASCADE)
+    rdno = models.CharField(max_length=10)
+    # 对应采购订单细节
+    pono = models.ForeignKey(PurchasingOrderDetail.pono)
+    podno = models.ForeignKey(PurchasingOrderDetail.podno)
+    pno = models.ForeignKey(Inventory.pno)
+    # 到货仓库
+    wno = models.ForeignKey(Inventory.wno)
+    # 到货数量
+    quat = models.IntegerField()
+    # 校验状态
+    rdStatus = models.CharField(max_length=1, choices=CHECKOUT_STATUS, default='0')
+    class Meta:
+        unique_together = ("rno", "rdno")
+
+class CustomerPrompt(models.Model):
+    cpromptno = models.CharField(max_length=10, primary_key=True)
+    # 对应发货单号
+    suno = models.ForeignKey(StockUp)
+    # 对应顾客号，冗余
+    cid = models.ForeignKey(Customer)
+    freight = models.FloatField()
+    cpdate = models.DateField()
+
+class CustomerReceipt(models.Model):
+    creceiptno = models.CharField(max_length=10, primary_key=True)
+    # 对应顾客催款单号
+    cpromptno = models.ForeignKey(CustomerPrompt)
+    crdate = models.DateField()
+
+class SupplierPrompt(models.Model):
+    spromptno = models.CharField(max_length=10, primary_key=True)
+    # 对应进货单号
+    rno = models.ForeignKey(Replenishment)
+    freight = models.FloatField()
+    spdate = models.DateField()
+
+class SupplierReceipt(models.Model):
+    sreceiptno = models.CharField(max_length=10, primary_key=True)
+    # 对应供应商催款单号
+    spromptno = models.ForeignKey(SupplierPrompt)
+    srdate = models.DateField()
