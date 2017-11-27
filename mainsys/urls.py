@@ -19,4 +19,10 @@ from mainsys.views import *
 
 urlpatterns = [
     url(r'^$', login),
+    url(r'^login', login),
+    url(r'^displayStock', displayStock),
+    url(r'^refreshStock', refreshStock),
+    url(r'^displayIncompleteCOrder', displayIncompleteCOrder),
+    url(r'^refreshCOrder', refreshCOrder),
+    url(r'^handleCOrder', handleCOrder)
 ]
