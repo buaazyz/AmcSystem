@@ -324,11 +324,14 @@ function sendPost(link, data)
     var tempForm = document.createElement('form');
     tempForm.setAttribute('action', link);
     tempForm.setAttribute('method', "post");
+    tempForm.setAttribute('style', 'display:none');
 
     var tempInfo = document.createElement('textarea');
     tempInfo.setAttribute('name', "info");
     tempInfo.value = data;
     tempForm.appendChild(tempInfo);
+
+    $(document.body).append(tempForm);
 
     tempForm.submit();
 }
