@@ -17,11 +17,16 @@ from django.conf.urls import url
 from django.contrib import admin
 from mainsys.views import *
 
+
 urlpatterns = [
     url(r'^$', login),
     url(r'^login$', login),
     url(r'^displayStock$', displayStock),
     url(r'^refreshStock$', refreshStock),
+    url(r'^displayFactory$', displayFactory),
+    url(r'^refreshFactory$', refreshFactory),
+    url(r'^displayCatalog$', displayCatalog),
+    url(r'^refreshCatalog$', refreshCatalog),
     url(r'^displayIncompleteCOrder$', displayIncompleteCOrder),
     url(r'^refreshCOrder$', refreshCOrder),
     url(r'^handleCOrder$', handleCOrder),

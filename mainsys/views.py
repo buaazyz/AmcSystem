@@ -617,3 +617,44 @@ def deleteReplenishment(req):
     robj.delete()
 
     return displayReplenishment(req)
+
+
+
+
+##厂家查询模块##
+#################
+def selectFactory():
+    factory = Factory.objects.values('fid', 'fname', 'faddr', 'ftel', 'femail')
+    return json.dumps(list(factory))
+
+def displayFactory(req):
+    data = {}
+    data['factory'] = selectFactory()
+
+    return render_to_response('factory.html', data, RequestContext(req))
+
+def refreshFactory(req):
+    return HttpResponse(selectFactory(), content_type='')
+
+
+#####################
+##产品目录查询模块##
+######################
+def selectCatalog():
+    catalog = ProductCatalog.objects.values('fid', 'pno', 'quotation')
+    return json.dumps(list(catalog))
+
+def displayCatalog(req):
+    data = {}
+    data['catalog'] = selectCatalog()
+
+    return render_to_response('productCatalog.html', data, RequestContext(req))
+
+def refreshCatalog(req):
+    return HttpResponse(selectCatalog(), content_type='')
+
+
+
+
+
+###################
