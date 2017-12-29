@@ -235,7 +235,7 @@ class ReplenishmentDetail(models.Model):
 class CustomerPrompt(models.Model):
     cpromptno = models.CharField(max_length=10, primary_key=True)
     # 对应发货单号
-    suno = models.ForeignKey(StockUp)
+    dbno = models.ForeignKey(DispatchBill)
     # 对应顾客号，冗余
     cid = models.ForeignKey(Customer)
     freight = models.FloatField()
@@ -264,3 +264,56 @@ class User(models.Model):
     name = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     usid = models.ForeignKey(staff, on_delete=models.CASCADE,null = True)
+
+class SalesReturn(models.Model):
+    SALESRETURN_STATUS = (
+        ('0', 'Incompleted'),
+        ('1', 'Completed')
+    )
+
+    srno = models.CharField(max_length=10, primary_key=True)
+    rno = models.ForeignKey(Replenishment)
+    srdate = models.DateField()
+    srstatus = models.CharField(max_length=1, choices=SALESRETURN_STATUS, default='0')
+
+class SalesReturnDetail(models.Model):
+    srno = models.ForeignKey(SalesReturn)
+    srdno = models.CharField(max_length=10, primary_key=True)
+    rdno = models.ForeignKey(ReplenishmentDetail)
+
+class InventoryAccount(models.Model):
+    INVENTORYACCOUNT_TYPE = (
+        ('-1', 'Out'),
+        ('1', 'In')
+    )
+
+    wno = models.ForeignKey(Warehouse)
+    pno = models.ForeignKey(Product)
+    iatype = models.CharField(max_length=2, choices=INVENTORYACCOUNT_TYPE)
+    quantity = models.IntegerField()
+    iadate = models.DateField()
+    billReference = models.CharField(max_length=10)
+
+class CustomerAccount(models.Model):
+    CUSTOMERACCOUNT_TYPE = (
+        ('0', 'Unreceived'),
+        ('1', 'Received')
+    )
+
+    cid = models.ForeignKey(Customer)
+    catype = models.CharField(max_length=1, choices=CUSTOMERACCOUNT_TYPE)
+    amount = models.FloatField()
+    cadate = models.DateField()
+    billReference = models.CharField(max_length=10)
+
+class SupplierAccount(models.Model):
+    SUPPLIERACCOUNT_TYPE = (
+        ('0', 'Unpaid'),
+        ('1', 'Paid')
+    )
+
+    fid = models.ForeignKey(Factory)
+    satype = models.CharField(max_length=1, choices=SUPPLIERACCOUNT_TYPE)
+    amount = models.FloatField()
+    sadate = models.DateField()
+    billReference = models.CharField(max_length=10)

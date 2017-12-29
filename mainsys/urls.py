@@ -17,16 +17,11 @@ from django.conf.urls import url
 from django.contrib import admin
 from mainsys.views import *
 
-
 urlpatterns = [
     url(r'^$', login),
     url(r'^login$', login),
     url(r'^displayStock$', displayStock),
     url(r'^refreshStock$', refreshStock),
-    url(r'^displayFactory$', displayFactory),
-    url(r'^refreshFactory$', refreshFactory),
-    url(r'^displayCatalog$', displayCatalog),
-    url(r'^refreshCatalog$', refreshCatalog),
     url(r'^displayIncompleteCOrder$', displayIncompleteCOrder),
     url(r'^refreshCOrder$', refreshCOrder),
     url(r'^handleCOrder$', handleCOrder),
@@ -48,5 +43,17 @@ urlpatterns = [
     url(r'^displayReplenishment$', displayReplenishment),
     url(r'^refreshAllRn$', refreshReplenishment),
     url(r'^selectAllRD$', selectAllRD),
-    url(r'^deleteReplenishment$', deleteReplenishment)
+    url(r'^deleteReplenishment$', deleteReplenishment),
+    url(r'^displaySalesReturn$', displaySalesReturn),
+    url(r'^refreshSR$', refreshSR),
+    url(r'^refreshIncompletedSR$', refreshIncompletedSR),
+    url(r'^returnSales$', returnSales),
+    url(r'^sendReturnSales$', sendSalesReturn),
+    url(r'^stockup-deliver$', displaySUOrder),
+    url(r'^refreshSUOrder$', refreshSUOrder),
+    url(r'^stockupdetail-deliver$', displaySUDetail),
+    url(r'^deliver$', deliver),
+    url(r'^displayDispatch$', displayDispatch),
+    url(r'^refreshDispatch$', refreshDispatch),
+    url(r'^displayDispatchDetail$', displayDispatchDetail)
 ]

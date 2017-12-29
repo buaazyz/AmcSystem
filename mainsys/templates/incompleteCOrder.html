@@ -51,18 +51,6 @@
                                 </tr>
                             </thead>
                             <tbody id="incompleteCOrderTable"></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>订单编号</th>
-                                    <th>顾客编号</th>
-                                    <th>顾客名称</th>
-                                    <th>订单金额</th>
-                                    <th>订单日期</th>
-                                    <th>最晚发货日期</th>
-                                    <th>订单状态</th>
-                                    <th>备货操作</th>
-                                </tr>
-                            </tfoot>
                         </table>
 
                     </div>
@@ -86,7 +74,7 @@
     <script type="text/javascript">
         var customerOrderJson = '{{ customerOrder }}';
         customerOrderJson = customerOrderJson.replace(/&quot;/g, '"');
-        displayEditableJson('incompleteCOrderTable', customerOrderJson, '备货', 'btn btn-info ', 'handleCOrder');
+        displayEditableJson('incompleteCOrderTable', customerOrderJson, '备货', 'btn btn-info ', 'handleCOrder', "fa fa-cubes");
     </script>
 
 
@@ -97,7 +85,7 @@
 
             $("#refresh").click(function(){
                 $.get("refreshCOrder", function(newInfo){
-                    displayEditableJson('incompleteCOrderTable', newInfo, '备货', 'btn btn-info ', 'handleCOrder')
+                    displayEditableJson('incompleteCOrderTable', newInfo, '备货', 'btn btn-info ', 'handleCOrder', "fa fa-cubes")
                 });
             });
         });

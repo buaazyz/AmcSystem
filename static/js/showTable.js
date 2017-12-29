@@ -40,6 +40,13 @@ function displayJsonInTable(tbodyid, jsonstr)
                 td.setAttribute("value", obj[i][attri]);
                 td.innerHTML = i + 1;
             }
+            else if(attri == 'srdno')
+            {
+                td.setAttribute("value", obj[i][attri]);
+                td.innerHTML = i + 1;
+            }
+            else if(attri == 'srstatus')
+                td.innerHTML = srstatus(obj[i][attri]);
             else
                 td.innerHTML = obj[i][attri];
 
@@ -52,7 +59,7 @@ function displayJsonInTable(tbodyid, jsonstr)
     tbody.innerHTML = div.innerHTML;
 }
 
-function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link)
+function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link, iconclass)
 {
     var obj = eval('('+jsonstr+')');
 
@@ -76,6 +83,8 @@ function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link)
                 td.innerHTML = poStatus(obj[i][attri]);
             else if(attri == 'rstatus')
                 td.innerHTML = rnStatus(obj[i][attri]);
+            else if(attri == 'srstatus')
+                td.innerHTML = srstatus(obj[i][attri]);
             else
                 td.innerHTML = obj[i][attri];
 
@@ -85,7 +94,7 @@ function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link)
         var bnt = document.createElement('button');
         bnt.setAttribute("class", buttonClass);
         bnt.setAttribute("onclick", "sendPost('"+link+"', '"+JSON.stringify(obj[i])+"')");
-        bnt.innerHTML = '<i class="fa fa-paste"></i>&nbsp;'+buttonText;
+        bnt.innerHTML = '<i class="'+iconclass+'"></i>&nbsp;'+buttonText;
         bnttd.appendChild(bnt);
         tr.appendChild(bnttd);
 
@@ -305,7 +314,7 @@ function rnStatus(status)
     return result;
 }
 
-function  rndstatus(status)
+function rndstatus(status)
 {
     var result;
 
@@ -315,6 +324,18 @@ function  rndstatus(status)
         result = '合格';
     else
         result = '不合格';
+
+    return result;
+}
+
+function srstatus(status)
+{
+    var result;
+
+    if(status == '0')
+        result = '未退货';
+    else
+        result = '已退货';
 
     return result;
 }

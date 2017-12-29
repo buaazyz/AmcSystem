@@ -50,17 +50,6 @@
                                 </tr>
                             </thead>
                             <tbody id="uncheckedRn"></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>补货单编号</th>
-                                    <th>采购订单编号</th>
-                                    <th>供应商编号</th>
-                                    <th>供应商名称</th>
-                                    <th>物料接收日期</th>
-                                    <th>补货状态</th>
-                                    <th>校验操作</th>
-                                </tr>
-                            </tfoot>
                         </table>
 
                     </div>
@@ -84,7 +73,7 @@
     <script type="text/javascript">
         var replenishmentJson = '{{ uncheckedRn }}';
         replenishmentJson = replenishmentJson.replace(/&quot;/g, '"');
-        displayEditableJson('uncheckedRn', replenishmentJson, '校验', 'btn btn-info ', 'checkMaterial');
+        displayEditableJson('uncheckedRn', replenishmentJson, '校验', 'btn btn-info ', 'checkMaterial', 'fa fa-edit');
     </script>
 
 
@@ -95,7 +84,7 @@
 
             $("#refresh").click(function(){
                 $.get("refreshRn", function(newInfo){
-                    displayEditableJson('uncheckedRn', newInfo, '校验', 'btn btn-info ', 'checkMaterial')
+                    displayEditableJson('uncheckedRn', newInfo, '校验', 'btn btn-info ', 'checkMaterial', 'fa fa-edit')
                 });
             });
         });

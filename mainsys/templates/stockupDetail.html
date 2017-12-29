@@ -11,6 +11,7 @@
 
     <link rel="shortcut icon" href="favicon.ico"> <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 
     <!-- Data Tables -->
     <link href="/static/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
@@ -26,7 +27,7 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="bars pull-left">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='displayStkupOrder'">返回</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='displayStkupOrder'"><i class="fa fa-backward"></i>&nbsp;返回</button>
                     </div>
                 </div>
             </div>
@@ -115,17 +116,6 @@
                                 </tr>
                             </thead>
                             <tbody id="stockupDetail"></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>备货单细节</th>
-                                    <th>产品编号</th>
-                                    <th>产品名称</th>
-                                    <th>产品规格</th>
-                                    <th>备货仓库</th>
-                                    <th>备货量</th>
-                                    <th>说明</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
 
@@ -140,6 +130,8 @@
     <!-- 全局js -->
     <script src="/static/js/jquery.min.js?v=2.1.4"></script>
     <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
 
     <!-- Data Tables -->
     <script src="/static/js/plugins/dataTables/jquery.dataTables.js"></script>

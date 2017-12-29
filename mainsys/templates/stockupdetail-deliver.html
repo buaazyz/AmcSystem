@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>AMC - 顾客订单细节</title>
+    <title>AMC - 备货单细节</title>
 
     <link rel="shortcut icon" href="favicon.ico"> <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
@@ -27,7 +27,7 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="bars pull-left">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='displayIncompleteCOrder'"><i class="fa fa-backward"></i>&nbsp;返回</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='stockup-deliver'"><i class="fa fa-backward"></i>&nbsp;返回</button>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>顾客订单</h5>
+                        <h5>备货单</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -48,13 +48,14 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>备货单编号</th>
                                     <th>订单编号</th>
-                                    <th>订单日期</th>
+                                    <th>备货日期</th>
                                     <th>最晚发货日期</th>
-                                    <th>备货状态</th>
+                                    <th>发货状态</th>
                                 </tr>
                             </thead>
-                            <tbody id="corder"></tbody>
+                            <tbody id="stockup"></tbody>
                         </table>
                     </div>
                 </div>
@@ -94,7 +95,7 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>订单细节</h5>
+                        <h5>备货单细节</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -105,24 +106,32 @@
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
-                                    <th>订单细节</th>
+                                    <th>备货单细节</th>
                                     <th>产品编号</th>
                                     <th>产品名称</th>
                                     <th>产品规格</th>
-                                    <th>订货量</th>
-                                    <th>未满足数量</th>
                                     <th>备货仓库</th>
                                     <th>备货量</th>
+                                    <th>说明</th>
                                 </tr>
                             </thead>
-                            <tbody id="corderDetail"></tbody>
+                            <tbody id="stockupDetail"></tbody>
                         </table>
                     </div>
 
                 </div>
-                <div class="columns columns-right pull-right">
-                    <button class="btn btn-success " type="button" onclick="checkStockUp()"><i class="fa fa-cubes"></i>&nbsp;备货</button>
+
+                <div class="col-sm-12 ibox-content">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="font-size: 20px">运费：</label>
+                        <div class="col-sm-2"><input  id="freight" class="form-control" required=""></div>
+                        <div class="columns columns-right pull-right">
+                            <button id="deliverBnt" class="btn btn-success " type="button" onclick="deliver()"><i class="fa fa-truck"></i>&nbsp;发货</button>
+                        </div>
+                    </div>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -143,17 +152,17 @@
     <script src="/static/js/checkForm.js"></script>
 
     <script type="text/javascript">
-        var corderJson = '{{ corderInfo }}';
-        corderJson = corderJson.replace(/&quot;/g, '"');
-        displayJsonInTable('corder', corderJson);
+        var stockupJson = '{{ stkupInfo }}';
+        stockupJson = stockupJson.replace(/&quot;/g, '"');
+        displayJsonInTable('stockup', stockupJson);
 
         var customerJson = '{{ customerInfo }}';
         customerJson = customerJson.replace(/&quot;/g, '"');
         displayJsonInTable('customer', customerJson);
 
-        var corderDetailJson = '{{ corderDetailInfo }}';
-        corderDetailJson = corderDetailJson.replace(/&quot;/g, '"');
-        displayJsonForUpdate('corderDetail', corderDetailJson, 'selectWarehouse');
+        var stockupDetailJson = '{{ stkupDetailInfo }}';
+        stockupDetailJson = stockupDetailJson.replace(/&quot;/g, '"');
+        displayJsonInTable('stockupDetail', stockupDetailJson);
     </script>
 
 

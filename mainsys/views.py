@@ -260,11 +260,16 @@ def displayStkupOrderDetail(req):
     stockupid = reqInfo['suno']
     customerid = reqInfo['cid']
 
+    return render_to_response('stockupDetail.html', selectSUDDict(stockupid, customerid), RequestContext(req))
+
+def selectSUDDict(stockupid, customerid):
+    data = {}
+
     data['stkupInfo'] = selectStkupById(stockupid)
     data['customerInfo'] = selectCustomerById(customerid)
     data['stkupDetailInfo'] = selectStkupDetailById(stockupid)
 
-    return render_to_response('stockupDetail.html', data, RequestContext(req))
+    return data
 
 def selectStkupById(stockupid):
     stockup = StockUp.objects.filter(suno=stockupid).values('suno', 'ono', 'sudate', 'ono__deliveryDate', 'suStatus')
@@ -510,6 +515,26 @@ def selectRDetailById(rno):
 def replenish(req):
     msg = req.POST.get('msg')
     rdobjArray = json.loads(msg)
+    nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+
+    robj = ReplenishmentDetail.objects.get(rdno=rdobjArray[0]['rdno']).rno
+
+    srsign = 0
+    for rd in rdobjArray:
+        if rd['rdstatus'] == '2':
+            srsign = 1
+            break
+
+    # 若有不合格情况需进行退货
+    if srsign == 1:
+        srnum = 1
+        srcount = SalesReturn.objects.count()
+        if srcount > 0:
+            lastSr = SalesReturn.objects.all()[srcount - 1].srno
+            srnum = int(lastSr[2:]) + 1
+        srno = 'SR' + str(srnum)
+        srobj = SalesReturn(srno=srno, rno=robj, srdate=nowDate, srstatus='0')
+        srobj.save()
 
     # 修改补货单细节
     for rd in rdobjArray:
@@ -520,7 +545,7 @@ def replenish(req):
         rdobj.rdStatus = rdstatus
         rdobj.save()
 
-        # 若产品合格则修改库存
+        # 若产品合格则修改库存与库存账
         if rdobj.rdStatus == '1':
             replenishQuat = rdobj.quat
             inventoryobjects = Inventory.objects.filter(wno=rdobj.wno, pno=rdobj.pno)
@@ -532,10 +557,29 @@ def replenish(req):
             inventoryobj.save()
             updateInventoryLevel(inventoryobj.wno.wno, inventoryobj.pno.pno)
 
+            iAccountobj = InventoryAccount(wno=rdobj.wno, pno=rdobj.pno, iatype='1', quantity=replenishQuat, iadate=str(nowDate), billReference=robj.rno)
+            iAccountobj.save()
+        else:
+            # 若产品不合格生成退货单细节
+            if srsign == 1:
+                srdnum = 1
+                srdcount = SalesReturnDetail.objects.count()
+                if srdcount > 0:
+                    lastSrd = SalesReturnDetail.objects.all()[srdcount-1].srdno
+                    srdnum = int(lastSrd[3:])+1
+                srdno = 'SRD' + str(srdnum)
+                srdobj = SalesReturnDetail(srno=srobj, srdno=srdno, rdno=rdobj)
+                srdobj.save()
+
+                # 修改采购订单细节
+                podobj = rdobj.podno
+                podobj.remainder = podobj.remainder + rdobj.quat
+                podobj.save()
+
     # 修改补货单
-    robj = ReplenishmentDetail.objects.get(rdno=rdobjArray[0]['rdno']).rno
     robj.rstatus = '1'
     robj.save()
+
     # 返回刷新
     data = selectRDS(robj.rno, robj.pono.fid.fid)
 
@@ -618,43 +662,218 @@ def deleteReplenishment(req):
 
     return displayReplenishment(req)
 
+###################
 
 
+## 查询退货单模块 ##
+###################
 
-##厂家查询模块##
-#################
-def selectFactory():
-    factory = Factory.objects.values('fid', 'fname', 'faddr', 'ftel', 'femail')
-    return json.dumps(list(factory))
-
-def displayFactory(req):
+def displaySalesReturn(req):
     data = {}
-    data['factory'] = selectFactory()
+    data['SalesReturn'] = selectSalesReturn()
 
-    return render_to_response('factory.html', data, RequestContext(req))
+    return render_to_response('returnProduct.html', data, RequestContext(req))
 
-def refreshFactory(req):
-    return HttpResponse(selectFactory(), content_type='')
+def refreshSR(req):
+    return HttpResponse(selectSalesReturn(), content_type='')
 
+def refreshIncompletedSR(req):
+    return HttpResponse(selectIncompletedSR(), content_type='')
 
-#####################
-##产品目录查询模块##
-######################
-def selectCatalog():
-    catalog = ProductCatalog.objects.values('fid', 'pno', 'quotation')
-    return json.dumps(list(catalog))
+def selectIncompletedSR():
+    salesReturn = SalesReturn.objects.filter(srstatus='0').values('srno', 'rno__pono', 'rno__pono__fid', 'rno__pono__fid__fname', 'srdate', 'srstatus')
+    return json.dumps(list(salesReturn), cls=DjangoJSONEncoder)
 
-def displayCatalog(req):
-    data = {}
-    data['catalog'] = selectCatalog()
-
-    return render_to_response('productCatalog.html', data, RequestContext(req))
-
-def refreshCatalog(req):
-    return HttpResponse(selectCatalog(), content_type='')
-
-
-
-
+def selectSalesReturn():
+    salesReturn = SalesReturn.objects.all().values('srno', 'rno__pono', 'rno__pono__fid', 'rno__pono__fid__fname', 'srdate', 'srstatus')
+    return json.dumps(list(salesReturn), cls=DjangoJSONEncoder)
 
 ###################
+
+
+## 查询退货单细节模块 ##
+###################
+
+def returnSales(req):
+    reqInfo = json.loads(req.POST.get('info'))
+    srno = reqInfo['srno']
+    factoryid = reqInfo['rno__pono__fid']
+
+    return render_to_response('returnSales.html', selectSRD(srno, factoryid), RequestContext(req))
+
+def selectSRD(srno, fid):
+    data = {}
+
+    data['SalesReturn'] = selectSRById(srno)
+    data['factory'] = selectFactoryById(fid)
+    data['srdetail'] = selectSRDById(srno)
+
+    return data
+
+def selectSRById(srno):
+    srobj = SalesReturn.objects.filter(srno=srno).values('srno', 'rno__pono', 'srdate', 'srstatus')
+    return json.dumps(list(srobj), cls=DjangoJSONEncoder)
+
+def selectSRDById(srno):
+    srdobj = SalesReturnDetail.objects.filter(srno=srno).values('srdno', 'rdno__pno', 'rdno__pno__pname', 'rdno__pno__gauge', 'rdno__wno', 'rdno__quat')
+    return json.dumps(list(srdobj))
+
+###################
+
+
+## 退货模块 ##
+###################
+
+def sendSalesReturn(req):
+    srno = req.POST.get('msg')
+
+    srobj = SalesReturn.objects.get(srno=srno)
+    srobj.srstatus = '1'
+    srobj.save()
+
+    # 返回刷新
+    data = selectSRD(srno, srobj.rno.pono.fid.fid)
+
+    return HttpResponse(json.dumps(data), content_type='')
+
+###################
+
+
+## 发货模块 ##
+###################
+
+def displaySUOrder(req):
+    data = {}
+    data['stkup'] = selectUndeliveredSU()
+
+    return render_to_response('stockup-deliver.html', data, RequestContext(req))
+
+def refreshSUOrder(req):
+    return HttpResponse(selectUndeliveredSU(), content_type='')
+
+def selectUndeliveredSU():
+    stockupOrder = StockUp.objects.filter(suStatus='0').values('suno', 'ono', 'cid', 'cid__cname', 'sudate', 'ono__deliveryDate', 'suStatus')
+
+    return json.dumps(list(stockupOrder), cls=DjangoJSONEncoder)
+
+def displaySUDetail(req):
+    reqInfo = json.loads(req.POST.get('info'))
+    stockupid = reqInfo['suno']
+    customerid = reqInfo['cid']
+
+    return render_to_response('stockupdetail-deliver.html', selectSUDDict(stockupid, customerid), RequestContext(req))
+
+def deliver(req):
+    msg = json.loads(req.POST.get('msg'))
+    suno = msg['suno']
+    freight = float(msg['freight'])
+
+    # 修改备货单
+    suobj = StockUp.objects.get(suno=suno)
+    suobj.suStatus = '1'
+    suobj.save()
+
+    # 生成发货单
+    dbnum = 1
+    dbcount = DispatchBill.objects.count()
+    if dbcount > 0:
+        lastDb = DispatchBill.objects.all()[dbcount-1].dbno
+        dbnum = int(lastDb[2:]) + 1
+    dbno = 'DP' + str(dbnum)
+    nowdate = datetime.datetime.now().strftime('%Y-%m-%d')
+    dbobj = DispatchBill(dbno=dbno, cid=suobj.cid, suno=suobj, dbdate=nowdate)
+    dbobj.save()
+
+    # 修改库存，登账
+    for sudobj in StockUpDetail.objects.filter(suno=suobj):
+        productobj = sudobj.pno
+        warehouseobj = sudobj.wno
+        quat = sudobj.quat
+        inventoryobj = Inventory.objects.get(pno=productobj, wno=warehouseobj)
+        inventoryobj.occupiedQuat = inventoryobj.occupiedQuat - quat
+        inventoryobj.save()
+
+        iaccountobj = InventoryAccount(wno=warehouseobj, pno=productobj, iatype='-1', quantity=-quat, iadate=nowdate, billReference=dbno)
+        iaccountobj.save()
+
+    # 生成催款单
+    cpnum = 1
+    cpcount = CustomerPrompt.objects.count()
+    if cpcount > 0:
+        lastCp = CustomerPrompt.objects.all()[cpcount-1].cpromptno
+        cpnum = int(lastCp[2:]) + 1
+    cpromptno = 'CP' + str(cpnum)
+    cpobj = CustomerPrompt(cpromptno=cpromptno, dbno=dbobj, cid = suobj.cid, freight=freight, cpdate=nowdate)
+    cpobj.save()
+
+    # 登应收账
+    caccountobj = CustomerAccount(cid=suobj.cid, catype='0', amount=workDPAmount(suno), cadate=nowdate, billReference=cpromptno)
+    caccountobj.save()
+
+    # 返回刷新
+    data = selectSUDDict(suobj.suno, suobj.cid.cid)
+
+    return HttpResponse(json.dumps(data), content_type='')
+
+###################
+
+
+## 计算金额模块 ##
+###################
+
+def workDPAmount(suno):
+    sudobjArray = StockUpDetail.objects.filter(suno=suno)
+
+    amount = 0
+
+    for sudobj in sudobjArray:
+        suquat = sudobj.quat
+        odobj = sudobj.odno
+        orderquat = odobj.pquat
+
+        amount = amount + odobj.subAmount * float(suquat) / orderquat
+
+    return amount
+
+###################
+
+
+## 发货单查询模块 ##
+###################
+
+def displayDispatch(req):
+    data = {}
+    data['dispatch'] = selectDispatch()
+
+    return render_to_response('dispatch.html', data, RequestContext(req))
+
+def refreshDispatch(req):
+    return HttpResponse(selectDispatch(), content_type='')
+
+def selectDispatch():
+    dpobj = DispatchBill.objects.all().values('dbno', 'suno__ono', 'cid', 'cid__cname', 'dbdate')
+    return json.dumps(list(dpobj), cls=DjangoJSONEncoder)
+
+def displayDispatchDetail(req):
+    reqInfo = json.loads(req.POST.get('info'))
+    dpno = reqInfo['dbno']
+    customerid = reqInfo['cid']
+
+    return render_to_response('dispatchDetail.html', selectDPDDict(dpno, customerid), RequestContext(req))
+
+def selectDPDDict(dpno, cid):
+    data = {}
+    data['dispatch'] = selectDPById(dpno)
+    data['customer'] = selectCustomerById(cid)
+    data['dispatchDetail'] = selectDPDById(dpno)
+
+    return data
+
+def selectDPById(dpno):
+    dpobj = DispatchBill.objects.filter(dbno=dpno).values('dbno', 'suno__ono', 'suno__ono__odate', 'dbdate')
+    return json.dumps(list(dpobj), cls=DjangoJSONEncoder)
+
+def selectDPDById(dpno):
+    suno = DispatchBill.objects.get(dbno=dpno).suno.suno
+    dpdobj = StockUpDetail.objects.filter(suno=suno).values('sudno', 'pno', 'pno__pname', 'pno__gauge', 'quat', 'odno__remainder')
+    return json.dumps(list(dpdobj))

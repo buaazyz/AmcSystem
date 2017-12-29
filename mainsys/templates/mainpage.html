@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
 
-    <title>H+ 后台主题UI框架 - 主页</title>
+    <title>AMC System - 主页</title>
 
-    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
-    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+    <meta name="keywords" content="AMC System Mainpage">
+    <meta name="description" content="">
 
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
@@ -47,29 +47,68 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="logo-element">H+
+                        <div class="logo-element">AMC
                         </div>
                     </li>
                     <li>
-                        <a class="J_menuItem" href="wjmanage"><i class="fa fa-columns"></i> <span class="nav-label">问卷管理</span></a>
-                    </li>
-                    <li>
                         <a href="#">
-                            <i class="fa fa fa-bar-chart-o"></i>
-                            <span class="nav-label">统计图表</span>
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">仓库管理 </span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a class="J_menuItem" href="bgraph">百度ECharts</a>
+                                <a class="J_menuItem" href="displayStock">库存水平</a>
+                            </li>
+                            <li>
+                                <a href="#">备货管理 <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a class="J_menuItem" href="displayIncompleteCOrder">订单备货</a>
+                                    </li>
+                                    <li>
+                                        <a class="J_menuItem" href="displayStkupOrder">备货单管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">入库管理 <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a class="J_menuItem" href="displayUndeliveredPOrder">物料接收</a>
+                                    </li>
+                                    <li>
+                                        <a class="J_menuItem" href="displayUncheckedRn">校验入库</a>
+                                    </li>
+                                    <li>
+                                        <a class="J_menuItem" href="displayReplenishment">补货单管理</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
 
                     <li>
-                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">数据分析</span><span class="fa arrow"></span></a>
+                        <a href="#">
+                            <i class="fa fa-truck"></i>
+                            <span class="nav-label">发退货管理 </span>
+                            <span class="fa arrow"></span>
+                        </a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="form_basic.html">基本表单</a>
+
+                            <li>
+                                <a href="#">发货管理 <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a class="J_menuItem" href="stockup-deliver">产品发货</a>
+                                    </li>
+                                    <li>
+                                        <a class="J_menuItem" href="displayDispatch">发货单管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="displaySalesReturn">退货管理</a>
                             </li>
                         </ul>
                     </li>
@@ -90,7 +129,7 @@
                 </button>
                 <nav class="page-tabs J_menuTabs">
                     <div class="page-tabs-content">
-                        <a href="javascript:;" class="active J_menuTab" data-id="mainpage">首页</a>
+                        <a href="javascript:;" class="active J_menuTab" data-id="mainpage"></a>
                     </div>
                 </nav>
                 <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
@@ -111,16 +150,9 @@
                 </div>
                 <a href="login" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
             </div>
-{#            <div class="row J_mainContent" id="content-main">#}
-{#                <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="mainpage" frameborder="0" data-id="mainpage" seamless></iframe>#}
-{#            </div>#}
-
-            <div>
-                <h1>主要显示部分，可以通过参考H+的一些具体的div和js，jquery，bootstrap等等，去实现你们想要的功能</h1>
-
+            <div class="row J_mainContent" id="content-main">
+                <iframe class="J_iframe" name="iframe0" width="100%" height="100%" frameborder="0" data-id="mainpage" seamless></iframe>
             </div>
-
-
 
             <div class="footer">
                 <div class="pull-right">&copy; 2014-2017<a href="dataimp" target="_blank">北航</a>

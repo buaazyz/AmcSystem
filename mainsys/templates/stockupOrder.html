@@ -51,18 +51,6 @@
                                 </tr>
                             </thead>
                             <tbody id="stockupOrderTable"></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>备货单编号</th>
-                                    <th>订单编号</th>
-                                    <th>顾客编号</th>
-                                    <th>顾客名称</th>
-                                    <th>备货日期</th>
-                                    <th>最晚发货日期</th>
-                                    <th>备货单状态</th>
-                                    <th>详情</th>
-                                </tr>
-                            </tfoot>
                         </table>
 
                     </div>
@@ -86,7 +74,7 @@
     <script type="text/javascript">
         var stockupOrderJson = '{{ stkup }}';
         stockupOrderJson = stockupOrderJson.replace(/&quot;/g, '"');
-        displayEditableJson('stockupOrderTable', stockupOrderJson, '查看细节', 'btn btn-w-m btn-primary', 'stkupOrderDetail');
+        displayEditableJson('stockupOrderTable', stockupOrderJson, '查看细节', 'btn btn-info', 'stkupOrderDetail', 'fa fa-search');
     </script>
 
 
@@ -97,7 +85,7 @@
 
             $("#refresh").click(function(){
                 $.get("refreshStkupOrder", function(newInfo){
-                    displayEditableJson('stockupOrderTable', newInfo, '查看细节', 'btn btn-w-m btn-primary', 'stkupOrderDetail')
+                    displayEditableJson('stockupOrderTable', newInfo, '查看细节', 'btn btn-info', 'stkupOrderDetail', 'fa fa-search')
                 });
             });
         });
