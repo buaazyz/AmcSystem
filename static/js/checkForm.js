@@ -372,3 +372,23 @@ function deliver()
         $("#deliverBnt").attr("disabled", "disabled");
     });
 }
+
+function receive()
+{
+    cpromptno = $('#cpromptno0').text()
+
+    $.post('receiptCP', {msg: cpromptno}, function (newInfo) {
+        swal({
+            title: "已收款",
+            type: "success"
+        });
+
+        newJson = eval('('+newInfo+')');
+
+        displayJsonInTable('customerPrompt', newJson['customerPrompt']);
+        displayJsonInTable('customer', newJson['customer']);
+        displayJsonInTable('cpDetail', newJson['cpdetail']);
+
+        $("#receiveBnt").attr("disabled", "disabled");
+    });
+}

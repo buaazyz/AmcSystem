@@ -75,6 +75,13 @@ WSGI_APPLICATION = 'AMCsys.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'AmcNew',
+        'USER': 'root',
+        'PASSWORD': 'xiyinmysql',
+        'HOST': '182.92.202.242',
+        'PORT': '3306',}
 
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',

@@ -7,10 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>AMC - 厂家信息</title>
+    <title>AMC - 顾客催款单</title>
 
     <link rel="shortcut icon" href="favicon.ico"> <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
 
     <!-- Data Tables -->
     <link href="/static/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
@@ -26,16 +27,23 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>厂家信息</h5>
+                        <h5>应收管理</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
                             </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
+                                <i class="fa fa-filter"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user" role="menu">
+                                <li>
+                                    <div class="checkbox i-checks">
+                                        <label id="unreceivedCP" value="0" onclick="cpFilter()"><input type="checkbox"> <i></i> 只显示应收催款单</label>
+                                    </div>
+                                </li>
+                            </ul>
                             <a id="refresh">
                                 <i class="glyphicon glyphicon-repeat"></i>
-                            </a>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
                             </a>
                         </div>
                     </div>
@@ -43,23 +51,18 @@
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
-                                    <th>厂家编号</th>
-                                    <th>厂家名称</th>
-                                    <th>厂家地址</th>
-                                    <th>厂家电话</th>
-                                    <th>厂家邮箱</th>
+                                    <th>顾客催款单编号</th>
+                                    <th>发货单编号</th>
+                                    <th>顾客编号</th>
+                                    <th>顾客名称</th>
+                                    <th>发货单金额</th>
+                                    <th>运费</th>
+                                    <th>时间</th>
+                                    <th>应收/已收</th>
+                                    <th>查看细节</th>
                                 </tr>
                             </thead>
-                            <tbody id="factoryTable"></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>厂家编号</th>
-                                    <th>厂家名称</th>
-                                    <th>厂家地址</th>
-                                    <th>厂家电话</th>
-                                    <th>厂家邮箱</th>
-                                </tr>
-                            </tfoot>
+                            <tbody id="customerPrompt"></tbody>
                         </table>
 
                     </div>
@@ -72,6 +75,8 @@
     <script src="/static/js/jquery.min.js?v=2.1.4"></script>
     <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
 
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
     <!-- Data Tables -->
     <script src="/static/js/plugins/dataTables/jquery.dataTables.js"></script>
     <script src="/static/js/plugins/dataTables/dataTables.bootstrap.js"></script>
@@ -79,11 +84,12 @@
     <!-- 自定义js -->
     <script src="/static/js/content.js?v=1.0.0"></script>
     <script src="/static/js/showTable.js"></script>
+    <script src="/static/js/filter.js"></script>
 
     <script type="text/javascript">
-        var factoryJson = '{{ factory }}';
-        factoryJson = factoryJson.replace(/&quot;/g, '"');
-        displayJsonInTable('factoryTable', factoryJson);
+        var customerPromptJson = '{{ customerPrompt }}';
+        customerPromptJson = customerPromptJson.replace(/&quot;/g, '"');
+        displayEditableJson('customerPrompt', customerPromptJson, '查看细节', 'btn btn-info ', 'cpdetail-receipt', 'fa fa-search');
     </script>
 
 
@@ -92,9 +98,13 @@
         $(document).ready(function () {
             $('.dataTables-example').dataTable();
 
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+            });
+
             $("#refresh").click(function(){
-                $.get("refreshFactory", function(newInfo){
-                    displayJsonInTable('FactoryTable', newInfo)
+                $.get("refreshCustomerPrompt", function(newInfo){
+                    displayEditableJson('customerPrompt', newInfo, '查看细节', 'btn btn-info ', 'cpdetail-receipt', 'fa fa-search')
                 });
             });
         });

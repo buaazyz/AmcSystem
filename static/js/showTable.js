@@ -13,6 +13,7 @@ function displayJsonInTable(tbodyid, jsonstr)
             var td = document.createElement('td');
             td.setAttribute("id", attri+i);
             td.setAttribute("name", attri);
+            td.setAttribute("value", obj[i][attri]);
 
             if(attri == 'level')
                 td.innerHTML = stockLevel(obj[i][attri]);
@@ -23,10 +24,7 @@ function displayJsonInTable(tbodyid, jsonstr)
             else if(attri == 'suStatus')
                 td.innerHTML = suStatus(obj[i][attri]);
             else if(attri == 'sudno')
-            {
-                td.setAttribute("value", obj[i][attri]);
                 td.innerHTML = i + 1;
-            }
             else if(attri == 'sudStatus')
                 td.innerHTML = sudStatus(obj[i][attri]);
             else if(attri == 'postatus')
@@ -36,17 +34,17 @@ function displayJsonInTable(tbodyid, jsonstr)
             else if(attri == 'rdStatus')
                 td.innerHTML = rndstatus(obj[i][attri]);
             else if(attri == 'rdno')
-            {
-                td.setAttribute("value", obj[i][attri]);
                 td.innerHTML = i + 1;
-            }
             else if(attri == 'srdno')
-            {
-                td.setAttribute("value", obj[i][attri]);
                 td.innerHTML = i + 1;
-            }
             else if(attri == 'srstatus')
                 td.innerHTML = srstatus(obj[i][attri]);
+            else if(attri == 'iatype')
+                td.innerHTML = iaStatus(obj[i][attri]);
+            else if(attri == 'cpstatus')
+                td.innerHTML = cpstatus(obj[i][attri]);
+            else if(attri == 'catype')
+                td.innerHTML = saStatus(obj[i][attri]);
             else
                 td.innerHTML = obj[i][attri];
 
@@ -57,6 +55,52 @@ function displayJsonInTable(tbodyid, jsonstr)
     }
     var tbody = document.getElementById(tbodyid);
     tbody.innerHTML = div.innerHTML;
+}
+
+function displayJsonInBootstrapTable(tableid, jsonstr)
+{
+    var obj = eval('('+jsonstr+')');
+
+    for(i=0; i<obj.length; i++)
+    {
+        for(var attri in obj[i])
+        {
+            if(attri == 'level')
+                obj[i][attri] = stockLevel(obj[i][attri]);
+            else if(attri == 'ostatus')
+                obj[i][attri] = orderStatus(obj[i][attri]);
+            else if(attri == 'credit')
+                obj[i][attri] = creditStatus(obj[i][attri]);
+            else if(attri == 'suStatus')
+                obj[i][attri] = suStatus(obj[i][attri]);
+            else if(attri == 'sudno')
+                obj[i][attri] = i + 1;
+            else if(attri == 'sudStatus')
+                obj[i][attri] = sudStatus(obj[i][attri]);
+            else if(attri == 'postatus')
+                obj[i][attri] = poStatus(obj[i][attri]);
+            else if(attri == 'rstatus')
+                obj[i][attri] = rnStatus(obj[i][attri]);
+            else if(attri == 'rdStatus')
+                obj[i][attri] = rndstatus(obj[i][attri]);
+            else if(attri == 'rdno')
+                obj[i][attri] = i + 1;
+            else if(attri == 'srdno')
+                obj[i][attri] = i + 1;
+            else if(attri == 'srstatus')
+                obj[i][attri] = srstatus(obj[i][attri]);
+            else if(attri == 'iatype')
+                obj[i][attri] = iaStatus(obj[i][attri]);
+            else if(attri == 'cpstatus')
+                obj[i][attri] = cpstatus(obj[i][attri]);
+            else if(attri == 'catype')
+                obj[i][attri] = saStatus(obj[i][attri]);
+            else
+                obj[i][attri] = obj[i][attri];
+        }
+    }
+
+    $('#'+tableid).bootstrapTable('load', obj);
 }
 
 function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link, iconclass)
@@ -74,6 +118,7 @@ function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link, ic
             var td = document.createElement('td');
             td.setAttribute("id", attri+i);
             td.setAttribute("name", attri);
+            td.setAttribute("value", obj[i][attri]);
 
             if(attri == 'ostatus')
                 td.innerHTML = orderStatus(obj[i][attri]);
@@ -85,6 +130,8 @@ function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link, ic
                 td.innerHTML = rnStatus(obj[i][attri]);
             else if(attri == 'srstatus')
                 td.innerHTML = srstatus(obj[i][attri]);
+            else if(attri == 'cpstatus')
+                td.innerHTML = cpstatus(obj[i][attri]);
             else
                 td.innerHTML = obj[i][attri];
 
@@ -121,17 +168,12 @@ function displayJsonForUpdate(tbodyid, jsonstr, link)
 
             td.setAttribute("id", attri+i);
             td.setAttribute("name", attri);
+            td.setAttribute("value", obj[i][attri]);
 
             if(attri == 'odno')
-            {
-                td.setAttribute("value", obj[i][attri]);
                 td.innerHTML = i + 1;
-            }
             else if(attri == 'podno')
-            {
-                td.setAttribute("value", obj[i][attri]);
                 td.innerHTML = i + 1;
-            }
             else
                 td.innerHTML = obj[i][attri];
 
@@ -180,12 +222,10 @@ function displayJsonForCheck(tbodyid, jsonstr)
             var td = document.createElement('td');
             td.setAttribute("id", attri+i);
             td.setAttribute("name", attri);
+            td.setAttribute("value", obj[i][attri]);
 
             if(attri == 'rdno')
-            {
-                td.setAttribute("value", obj[i][attri]);
                 td.innerHTML = i + 1;
-            }
             else
                 td.innerHTML = obj[i][attri];
 
@@ -338,6 +378,30 @@ function srstatus(status)
         result = '已退货';
 
     return result;
+}
+
+function iaStatus(status)
+{
+    if(status == '-1')
+        return '出库';
+    else
+        return '入库';
+}
+
+function cpstatus(status)
+{
+    if(status == '0')
+        return '应收';
+    else
+        return '已收';
+}
+
+function saStatus(status)
+{
+    if(status == '0')
+        return '应收账';
+    else
+        return '销售业务账';
 }
 
 function sendPost(link, data)

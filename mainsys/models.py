@@ -233,13 +233,19 @@ class ReplenishmentDetail(models.Model):
         unique_together = ("rno", "rdno")
 
 class CustomerPrompt(models.Model):
+    CUSTOMERPROMPT_STATUS = (
+        ('0', 'Unreceived'),
+        ('1', 'Received')
+    )
     cpromptno = models.CharField(max_length=10, primary_key=True)
     # 对应发货单号
     dbno = models.ForeignKey(DispatchBill)
     # 对应顾客号，冗余
     cid = models.ForeignKey(Customer)
+    amount = models.FloatField()
     freight = models.FloatField()
     cpdate = models.DateField()
+    cpstatus = models.CharField(max_length=1, choices=CUSTOMERPROMPT_STATUS, default='0')
 
 class CustomerReceipt(models.Model):
     creceiptno = models.CharField(max_length=10, primary_key=True)
@@ -248,11 +254,17 @@ class CustomerReceipt(models.Model):
     crdate = models.DateField()
 
 class SupplierPrompt(models.Model):
+    SUPPLIERPROMPT_STATUS = (
+        ('0', 'Unpaid'),
+        ('1', 'Paid')
+    )
     spromptno = models.CharField(max_length=10, primary_key=True)
     # 对应进货单号
     rno = models.ForeignKey(Replenishment)
+    amount = models.FloatField()
     freight = models.FloatField()
     spdate = models.DateField()
+    spstatus = models.CharField(max_length=1, choices=SUPPLIERPROMPT_STATUS, default='0')
 
 class SupplierReceipt(models.Model):
     sreceiptno = models.CharField(max_length=10, primary_key=True)

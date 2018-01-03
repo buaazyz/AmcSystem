@@ -8,6 +8,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponseRedirect
 
 from mainsys.models import *
+from django.db.models import Sum
 
 import json
 import datetime
@@ -803,11 +804,11 @@ def deliver(req):
         lastCp = CustomerPrompt.objects.all()[cpcount-1].cpromptno
         cpnum = int(lastCp[2:]) + 1
     cpromptno = 'CP' + str(cpnum)
-    cpobj = CustomerPrompt(cpromptno=cpromptno, dbno=dbobj, cid = suobj.cid, freight=freight, cpdate=nowdate)
+    cpobj = CustomerPrompt(cpromptno=cpromptno, dbno=dbobj, cid = suobj.cid, amount=workDPAmount(suno), freight=freight, cpdate=nowdate, cpstatus='0')
     cpobj.save()
 
     # 登应收账
-    caccountobj = CustomerAccount(cid=suobj.cid, catype='0', amount=workDPAmount(suno), cadate=nowdate, billReference=cpromptno)
+    caccountobj = CustomerAccount(cid=suobj.cid, catype='0', amount=workDPAmount(suno)+freight, cadate=nowdate, billReference=cpromptno)
     caccountobj.save()
 
     # 返回刷新
@@ -877,3 +878,271 @@ def selectDPDById(dpno):
     suno = DispatchBill.objects.get(dbno=dpno).suno.suno
     dpdobj = StockUpDetail.objects.filter(suno=suno).values('sudno', 'pno', 'pno__pname', 'pno__gauge', 'quat', 'odno__remainder')
     return json.dumps(list(dpdobj))
+
+###################
+
+
+## 库存账查询模块 ##
+###################
+
+def displayIAccount(req):
+    data = {}
+    data['inventoryAccount'] = selectIAccount()
+
+    return render_to_response('inventoryAccount.html', data, RequestContext(req))
+
+def refreshIAccount(req):
+    return HttpResponse(selectIAccount(), content_type='')
+
+def selectIAccount():
+    iaobj = InventoryAccount.objects.order_by('iadate').values('iatype', 'wno', 'pno', 'pno__pname', 'pno__gauge', 'quantity', 'iadate')
+    return json.dumps(list(iaobj), cls=DjangoJSONEncoder)
+
+def iaccountDateFilter(req):
+    msg = json.loads(req.POST.get('msg'))
+    startDate = msg['startDate']
+    endDate = msg['endDate']
+
+    return HttpResponse(selectIAccountByDate(startDate, endDate), content_type='')
+
+def selectIAccountByDate(startDate, endDate):
+    iaobj = InventoryAccount.objects.all()
+    if startDate != '':
+        iaobj = iaobj.filter(iadate__gte=startDate)
+    if endDate != '':
+        iaobj = iaobj.filter(iadate__lte=endDate)
+
+    iaobj = iaobj.order_by('iadate').values('iatype', 'wno', 'pno', 'pno__pname', 'pno__gauge', 'quantity', 'iadate')
+    return json.dumps(list(iaobj), cls=DjangoJSONEncoder)
+
+def inventorySta(req):
+    return render_to_response('inventoryAccount_echarts.html', {}, RequestContext(req))
+
+def displayIASta(req):
+    msg = json.loads(req.POST.get('msg'))
+    wno = msg['wno']
+    pno = msg['pno']
+    startDate = msg['startDate']
+    endDate = msg['endDate']
+
+    return HttpResponse(selectIAccountAdvanced(wno, pno, startDate, endDate), content_type='')
+
+def selectIAccountAdvanced(wno, pno, startDate, endDate):
+    if pno == '':
+        return -1
+
+    iaobj = InventoryAccount.objects.all()
+    if wno != '':
+        warehouseobj = Warehouse.objects.get(wno=wno)
+        iaobj = iaobj.filter(wno=warehouseobj)
+    if pno != '':
+        productobj = Product.objects.get(pno=pno)
+        iaobj = iaobj.filter(pno=productobj)
+    if startDate != '':
+        iaobj = iaobj.filter(iadate__gte=startDate)
+    if endDate != '':
+        iaobj = iaobj.filter(iadate__lte=endDate)
+
+    iaobj = iaobj.values('iadate').annotate(Sum('quantity')).order_by('iadate')
+
+    return json.dumps(list(iaobj), cls=DjangoJSONEncoder)
+
+###################
+
+
+## 应收模块 ##
+###################
+
+def displayCustomerPrompt(req):
+    data = {}
+    data['customerPrompt'] = selectCustomerPrompt()
+
+    return render_to_response('customerprompt-receipt.html', data, RequestContext(req))
+
+def refreshCustomerPrompt(req):
+    return HttpResponse(selectCustomerPrompt(), content_type='')
+
+def refreshUnreceivedCP(req):
+    return HttpResponse(selectUnreceivedCP(), content_type='')
+
+def selectCustomerPrompt():
+    cpobj = CustomerPrompt.objects.all().values('cpromptno', 'dbno', 'cid', 'cid__cname', 'amount', 'freight', 'cpdate', 'cpstatus')
+    return json.dumps(list(cpobj), cls=DjangoJSONEncoder)
+
+def selectUnreceivedCP():
+    cpobj = CustomerPrompt.objects.filter(cpstatus='0').values('cpromptno', 'dbno', 'cid', 'cid__cname', 'amount', 'freight', 'cpdate',
+                                                'cpstatus')
+    return json.dumps(list(cpobj), cls=DjangoJSONEncoder)
+
+def displayCPDetail(req):
+    reqInfo = json.loads(req.POST.get('info'))
+    cpromptno = reqInfo['cpromptno']
+    cid = reqInfo['cid']
+
+    return render_to_response('cpdetail-receipt.html', selectCPDDict(cpromptno, cid), RequestContext(req))
+
+def selectCPDDict(cpromptno, cid):
+    data = {}
+    data['customerPrompt'] = selectCPById(cpromptno)
+    data['customer'] = selectCustomerById(cid)
+    data['cpdetail'] = selectCPDById(cpromptno)
+
+    return data
+
+def selectCPById(cpromptno):
+    cpobj = CustomerPrompt.objects.filter(cpromptno=cpromptno).values('cpromptno', 'dbno', 'amount', 'freight', 'cpdate', 'cpstatus')
+    return json.dumps(list(cpobj), cls=DjangoJSONEncoder)
+
+def selectCPDById(cpromptno):
+    cpobj = CustomerPrompt.objects.get(cpromptno=cpromptno)
+    return selectDPDById(cpobj.dbno.dbno)
+
+def receiptCP(req):
+    cpromptno = req.POST.get('msg')
+
+    # 修改催款单状态
+    cpobj = CustomerPrompt.objects.get(cpromptno=cpromptno)
+    cpobj.cpstatus = '1'
+    cpobj.save()
+
+    # 生成发票
+    nowdate = datetime.datetime.now().strftime('%Y-%m-%d')
+    crnum = 1
+    crcount = CustomerReceipt.objects.count()
+    if crcount > 0:
+        lastCr = CustomerReceipt.objects.all()[crcount - 1].creceiptno
+        crnum = int(lastCr[2:]) + 1
+    creceiptno = 'CR' + str(crnum)
+    crobj = CustomerReceipt(creceiptno=creceiptno, cpromptno=cpobj, crdate=nowdate)
+    crobj.save()
+
+    # 登销售业务账
+    caccountobj = CustomerAccount(cid=cpobj.cid, catype='1', amount=cpobj.amount+cpobj.freight, cadate=nowdate,
+                                  billReference=creceiptno)
+    caccountobj.save()
+
+    # 返回刷新
+    data = selectCPDDict(cpromptno, cpobj.cid.cid)
+
+    return HttpResponse(json.dumps(data), content_type='')
+
+def displayCustomerReceipt(req):
+    data = {}
+    data['customerReceipt'] = selectCustomerReceipt()
+
+    return render_to_response('customerreceipt.html', data, RequestContext(req))
+
+def refreshCustomerReceipt(req):
+    return HttpResponse(selectCustomerReceipt(), content_type='')
+
+def selectCustomerReceipt():
+    crobj = CustomerReceipt.objects.all().values('creceiptno', 'cpromptno__cid', 'cpromptno__cid__cname', 'cpromptno__amount', 'cpromptno__freight', 'crdate')
+    return json.dumps(list(crobj), cls=DjangoJSONEncoder)
+
+def displayCRDetail(req):
+    msg = json.loads(req.POST.get('info'))
+    crno = msg['creceiptno']
+    cid = msg['cpromptno__cid']
+
+    return render_to_response('crdetail.html', selectCRDDict(crno, cid), content_type='')
+
+def selectCRDDict(crno, cid):
+    data = {}
+    data['customerReceipt'] = selectCustomerReceiptById(crno)
+    data['customer'] = selectCustomerById(cid)
+    data['crdetail'] = selectCRDetailById(crno)
+
+    return data
+
+def selectCustomerReceiptById(crno):
+    crobj = CustomerReceipt.objects.filter(creceiptno=crno).values('creceiptno', 'cpromptno__amount', 'cpromptno__freight', 'crdate')
+    return json.dumps(list(crobj), cls=DjangoJSONEncoder)
+
+def selectCRDetailById(crno):
+    suobj = CustomerReceipt.objects.get(creceiptno=crno).cpromptno.dbno.suno
+    sudobj = StockUpDetail.objects.filter(suno=suobj).values('sudno', 'pno', 'pno__pname', 'pno__gauge', 'quat')
+
+    return json.dumps(list(sudobj), cls=DjangoJSONEncoder)
+
+###################
+
+
+## 销售业务账查询模块 ##
+###################
+
+def displaySalesAccount(req):
+    data = {}
+    data['salesAccount'] = selectSalesAccount()
+    data['unpaid'], data['paid'] = selectSalesAccountSum(data['salesAccount'])
+
+    return render_to_response('salesAccount.html', data, RequestContext(req))
+
+def refreshSalesAccount(req):
+    return HttpResponse(selectSalesAccount(), content_type='')
+
+def selectSalesAccount():
+    saobj = CustomerAccount.objects.order_by('cadate').values('catype', 'cid', 'cid__cname', 'amount', 'cadate')
+
+    return json.dumps(list(saobj), cls=DjangoJSONEncoder)
+
+def selectSalesAccountSum(saobjArray):
+    unpaidsum = 0
+    paidsum = 0
+    saobjArray = json.loads(saobjArray)
+
+    for saobj in saobjArray:
+        if saobj['catype'] == '0':
+            unpaidsum = unpaidsum + saobj['amount']
+        else:
+            paidsum = paidsum + saobj['amount']
+
+    return unpaidsum, paidsum
+
+def salesAccountFilter(req):
+    msg = json.loads(req.POST.get('msg'))
+    cid = msg['cid']
+    startDate = msg['startDate']
+    endDate = msg['endDate']
+
+    saobj = CustomerAccount.objects.all()
+
+    if cid != '':
+        customerobj = Customer.objects.get(cid=cid)
+        saobj = saobj.filter(cid=cid)
+    if startDate != '':
+        saobj = saobj.filter(cadate__gte=startDate)
+    if endDate != '':
+        saobj = saobj.filter(cadate__lte=endDate)
+
+    saobj = saobj.values('catype', 'cid', 'cid__cname', 'amount', 'cadate')
+    data = {}
+    data['salesAccount'] = json.dumps(list(saobj), cls=DjangoJSONEncoder)
+    data['unpaid'], data['paid'] = selectSalesAccountSum(data['salesAccount'])
+
+    return  HttpResponse(json.dumps(data), content_type='')
+
+def salesSta(req):
+    return render_to_response('salesAccount_echarts.html', content_type='')
+
+def displaySASta(req):
+    msg = json.loads(req.POST.get('msg'))
+    cid = msg['cid']
+    startDate = msg['startDate']
+    endDate = msg['endDate']
+
+    return HttpResponse(selectSalesAccountAdvanced(cid, startDate, endDate), content_type='')
+
+def selectSalesAccountAdvanced(cid, startDate, endDate):
+    saobj = CustomerAccount.objects.filter(catype='1')
+
+    if cid != '':
+        customerobj = Customer.objects.get(cid=cid)
+        saobj = saobj.filter(cid=customerobj)
+    if startDate != '':
+        saobj = saobj.filter(cadate__gte=startDate)
+    if endDate != '':
+        saobj = saobj.filter(cadate__lte=endDate)
+
+    saobj = saobj.values('cadate').annotate(Sum('amount')).order_by('cadate')
+
+    return json.dumps(list(saobj), cls=DjangoJSONEncoder)
