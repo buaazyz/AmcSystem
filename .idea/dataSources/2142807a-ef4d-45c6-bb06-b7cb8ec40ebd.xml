@@ -1,0 +1,1571 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="AmcNew@182.92.202.242">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+    <root id="1"/>
+    <schema id="2" parent="1" name="AmcNew">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="amc"/>
+    <schema id="4" parent="1" name="amc2"/>
+    <schema id="5" parent="1" name="applicase"/>
+    <schema id="6" parent="1" name="auction"/>
+    <schema id="7" parent="1" name="brandnewtest"/>
+    <schema id="8" parent="1" name="brandnewz"/>
+    <schema id="9" parent="1" name="byzzl"/>
+    <schema id="10" parent="1" name="consume"/>
+    <schema id="11" parent="1" name="education"/>
+    <schema id="12" parent="1" name="information_schema"/>
+    <schema id="13" parent="1" name="innovation"/>
+    <schema id="14" parent="1" name="mysql"/>
+    <schema id="15" parent="1" name="performance_schema"/>
+    <schema id="16" parent="1" name="pushkin"/>
+    <schema id="17" parent="1" name="sys"/>
+    <schema id="18" parent="1" name="teach"/>
+    <schema id="19" parent="1" name="wdy"/>
+    <schema id="20" parent="1" name="wenjuan"/>
+    <schema id="21" parent="1" name="zbpj"/>
+    <table id="22" parent="2" name="auth_group"/>
+    <table id="23" parent="2" name="auth_group_permissions"/>
+    <table id="24" parent="2" name="auth_permission"/>
+    <table id="25" parent="2" name="auth_user"/>
+    <table id="26" parent="2" name="auth_user_groups"/>
+    <table id="27" parent="2" name="auth_user_user_permissions"/>
+    <table id="28" parent="2" name="django_admin_log"/>
+    <table id="29" parent="2" name="django_content_type"/>
+    <table id="30" parent="2" name="django_migrations"/>
+    <table id="31" parent="2" name="django_session"/>
+    <table id="32" parent="2" name="mainsys_corderdetail"/>
+    <table id="33" parent="2" name="mainsys_customer"/>
+    <table id="34" parent="2" name="mainsys_customerorder"/>
+    <table id="35" parent="2" name="mainsys_customerprompt"/>
+    <table id="36" parent="2" name="mainsys_customerreceipt"/>
+    <table id="37" parent="2" name="mainsys_department"/>
+    <table id="38" parent="2" name="mainsys_discount"/>
+    <table id="39" parent="2" name="mainsys_dispatchbill"/>
+    <table id="40" parent="2" name="mainsys_factory"/>
+    <table id="41" parent="2" name="mainsys_inventory"/>
+    <table id="42" parent="2" name="mainsys_inventorymgmt"/>
+    <table id="43" parent="2" name="mainsys_product"/>
+    <table id="44" parent="2" name="mainsys_productcatalog"/>
+    <table id="45" parent="2" name="mainsys_purchasingorder"/>
+    <table id="46" parent="2" name="mainsys_purchasingorderdetail"/>
+    <table id="47" parent="2" name="mainsys_replenishment"/>
+    <table id="48" parent="2" name="mainsys_replenishmentdetail"/>
+    <table id="49" parent="2" name="mainsys_staff"/>
+    <table id="50" parent="2" name="mainsys_stocklevel"/>
+    <table id="51" parent="2" name="mainsys_stockup"/>
+    <table id="52" parent="2" name="mainsys_stockupdetail"/>
+    <table id="53" parent="2" name="mainsys_supplierprompt"/>
+    <table id="54" parent="2" name="mainsys_supplierreceipt"/>
+    <table id="55" parent="2" name="mainsys_user"/>
+    <table id="56" parent="2" name="mainsys_warehouse"/>
+    <column id="57" parent="22" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="58" parent="22" name="name">
+      <Position>2</Position>
+      <DataType>varchar(80)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="59" parent="22" name="name">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="60" parent="22" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="61" parent="22" name="name">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name</UnderlyingIndexName>
+    </key>
+    <column id="62" parent="23" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="63" parent="23" name="group_id">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="64" parent="23" name="permission_id">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="65" parent="23" name="auth_group_permissions_group_id_permission_id_0cd325b0_uniq">
+      <ColNames>group_id
+permission_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="66" parent="23" name="auth_group_permissio_permission_id_84c5c92e_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+    </index>
+    <key id="67" parent="23" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="68" parent="23" name="auth_group_permissions_group_id_permission_id_0cd325b0_uniq">
+      <ColNames>group_id
+permission_id</ColNames>
+      <UnderlyingIndexName>auth_group_permissions_group_id_permission_id_0cd325b0_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="69" parent="23" name="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id">
+      <ColNames>group_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>auth_group</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="70" parent="23" name="auth_group_permissio_permission_id_84c5c92e_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>auth_permission</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="71" parent="24" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="72" parent="24" name="name">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="73" parent="24" name="content_type_id">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="74" parent="24" name="codename">
+      <Position>4</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="75" parent="24" name="auth_permission_content_type_id_codename_01ab375a_uniq">
+      <ColNames>content_type_id
+codename</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="76" parent="24" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="77" parent="24" name="auth_permission_content_type_id_codename_01ab375a_uniq">
+      <ColNames>content_type_id
+codename</ColNames>
+      <UnderlyingIndexName>auth_permission_content_type_id_codename_01ab375a_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="78" parent="24" name="auth_permission_content_type_id_2f476e4b_fk_django_co">
+      <ColNames>content_type_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>django_content_type</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="79" parent="25" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="80" parent="25" name="password">
+      <Position>2</Position>
+      <DataType>varchar(128)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="81" parent="25" name="last_login">
+      <Position>3</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="82" parent="25" name="is_superuser">
+      <Position>4</Position>
+      <DataType>tinyint(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="83" parent="25" name="username">
+      <Position>5</Position>
+      <DataType>varchar(150)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="84" parent="25" name="first_name">
+      <Position>6</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="85" parent="25" name="last_name">
+      <Position>7</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="86" parent="25" name="email">
+      <Position>8</Position>
+      <DataType>varchar(254)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="87" parent="25" name="is_staff">
+      <Position>9</Position>
+      <DataType>tinyint(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="88" parent="25" name="is_active">
+      <Position>10</Position>
+      <DataType>tinyint(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="89" parent="25" name="date_joined">
+      <Position>11</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="90" parent="25" name="username">
+      <ColNames>username</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="91" parent="25" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="92" parent="25" name="username">
+      <ColNames>username</ColNames>
+      <UnderlyingIndexName>username</UnderlyingIndexName>
+    </key>
+    <column id="93" parent="26" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="94" parent="26" name="user_id">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="95" parent="26" name="group_id">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="96" parent="26" name="auth_user_groups_group_id_97559544_fk_auth_group_id">
+      <ColNames>group_id</ColNames>
+    </index>
+    <index id="97" parent="26" name="auth_user_groups_user_id_group_id_94350c0c_uniq">
+      <ColNames>user_id
+group_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="98" parent="26" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="99" parent="26" name="auth_user_groups_user_id_group_id_94350c0c_uniq">
+      <ColNames>user_id
+group_id</ColNames>
+      <UnderlyingIndexName>auth_user_groups_user_id_group_id_94350c0c_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="100" parent="26" name="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>auth_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="101" parent="26" name="auth_user_groups_group_id_97559544_fk_auth_group_id">
+      <ColNames>group_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>auth_group</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="102" parent="27" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="103" parent="27" name="user_id">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="104" parent="27" name="permission_id">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="105" parent="27" name="auth_user_user_permissions_user_id_permission_id_14a6b632_uniq">
+      <ColNames>user_id
+permission_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="106" parent="27" name="auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+    </index>
+    <key id="107" parent="27" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="108" parent="27" name="auth_user_user_permissions_user_id_permission_id_14a6b632_uniq">
+      <ColNames>user_id
+permission_id</ColNames>
+      <UnderlyingIndexName>auth_user_user_permissions_user_id_permission_id_14a6b632_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="109" parent="27" name="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>auth_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="110" parent="27" name="auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>auth_permission</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="111" parent="28" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="112" parent="28" name="action_time">
+      <Position>2</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="113" parent="28" name="object_id">
+      <Position>3</Position>
+      <DataType>longtext|0</DataType>
+    </column>
+    <column id="114" parent="28" name="object_repr">
+      <Position>4</Position>
+      <DataType>varchar(200)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="115" parent="28" name="action_flag">
+      <Position>5</Position>
+      <DataType>smallint(5) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="116" parent="28" name="change_message">
+      <Position>6</Position>
+      <DataType>longtext|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="117" parent="28" name="content_type_id">
+      <Position>7</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="118" parent="28" name="user_id">
+      <Position>8</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="119" parent="28" name="django_admin_log_content_type_id_c4bce8eb_fk_django_co">
+      <ColNames>content_type_id</ColNames>
+    </index>
+    <index id="120" parent="28" name="django_admin_log_user_id_c564eba6_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+    </index>
+    <key id="121" parent="28" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="122" parent="28" name="django_admin_log_content_type_id_c4bce8eb_fk_django_co">
+      <ColNames>content_type_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>django_content_type</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="123" parent="28" name="django_admin_log_user_id_c564eba6_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>auth_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="124" parent="29" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="125" parent="29" name="app_label">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="126" parent="29" name="model">
+      <Position>3</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="127" parent="29" name="django_content_type_app_label_model_76bd3d3b_uniq">
+      <ColNames>app_label
+model</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="128" parent="29" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="129" parent="29" name="django_content_type_app_label_model_76bd3d3b_uniq">
+      <ColNames>app_label
+model</ColNames>
+      <UnderlyingIndexName>django_content_type_app_label_model_76bd3d3b_uniq</UnderlyingIndexName>
+    </key>
+    <column id="130" parent="30" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="131" parent="30" name="app">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="132" parent="30" name="name">
+      <Position>3</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="133" parent="30" name="applied">
+      <Position>4</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="134" parent="30" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="135" parent="31" name="session_key">
+      <Position>1</Position>
+      <DataType>varchar(40)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="136" parent="31" name="session_data">
+      <Position>2</Position>
+      <DataType>longtext|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="137" parent="31" name="expire_date">
+      <Position>3</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="138" parent="31" name="django_session_expire_date_a5c62663">
+      <ColNames>expire_date</ColNames>
+    </index>
+    <key id="139" parent="31" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>session_key</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="140" parent="32" name="odno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="141" parent="32" name="pquat">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="142" parent="32" name="remainder">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="143" parent="32" name="subAmount">
+      <Position>4</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="144" parent="32" name="dcno_id">
+      <Position>5</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="145" parent="32" name="ono_id">
+      <Position>6</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="146" parent="32" name="pno_id">
+      <Position>7</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="147" parent="32" name="mainsys_corderdetail_dcno_id_41c3881b_fk_mainsys_discount_dcno">
+      <ColNames>dcno_id</ColNames>
+    </index>
+    <index id="148" parent="32" name="mainsys_corderdetail_ono_id_b5f9d208_fk_mainsys_c">
+      <ColNames>ono_id</ColNames>
+    </index>
+    <index id="149" parent="32" name="mainsys_corderdetail_pno_id_9764a484_fk_mainsys_product_pno">
+      <ColNames>pno_id</ColNames>
+    </index>
+    <key id="150" parent="32" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>odno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="151" parent="32" name="mainsys_corderdetail_dcno_id_41c3881b_fk_mainsys_discount_dcno">
+      <ColNames>dcno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_discount</RefTableName>
+      <RefColNames>dcno</RefColNames>
+    </foreign-key>
+    <foreign-key id="152" parent="32" name="mainsys_corderdetail_ono_id_b5f9d208_fk_mainsys_c">
+      <ColNames>ono_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_customerorder</RefTableName>
+      <RefColNames>ono</RefColNames>
+    </foreign-key>
+    <foreign-key id="153" parent="32" name="mainsys_corderdetail_pno_id_9764a484_fk_mainsys_product_pno">
+      <ColNames>pno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_product</RefTableName>
+      <RefColNames>pno</RefColNames>
+    </foreign-key>
+    <column id="154" parent="33" name="cid">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="155" parent="33" name="cname">
+      <Position>2</Position>
+      <DataType>varchar(40)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="156" parent="33" name="caddr">
+      <Position>3</Position>
+      <DataType>varchar(40)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="157" parent="33" name="consignee">
+      <Position>4</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="158" parent="33" name="conAddr">
+      <Position>5</Position>
+      <DataType>varchar(40)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="159" parent="33" name="ctel">
+      <Position>6</Position>
+      <DataType>varchar(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="160" parent="33" name="cemail">
+      <Position>7</Position>
+      <DataType>varchar(40)|0</DataType>
+    </column>
+    <column id="161" parent="33" name="credit">
+      <Position>8</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="162" parent="33" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>cid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="163" parent="34" name="ono">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="164" parent="34" name="odate">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="165" parent="34" name="deliveryDate">
+      <Position>3</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="166" parent="34" name="amount">
+      <Position>4</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="167" parent="34" name="ostatus">
+      <Position>5</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="168" parent="34" name="cid_id">
+      <Position>6</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="169" parent="34" name="mainsys_customerorder_cid_id_981bd5e6_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+    </index>
+    <key id="170" parent="34" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ono</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="171" parent="34" name="mainsys_customerorder_cid_id_981bd5e6_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_customer</RefTableName>
+      <RefColNames>cid</RefColNames>
+    </foreign-key>
+    <column id="172" parent="35" name="cpromptno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="173" parent="35" name="freight">
+      <Position>2</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="174" parent="35" name="cpdate">
+      <Position>3</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="175" parent="35" name="cid_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="176" parent="35" name="suno_id">
+      <Position>5</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="177" parent="35" name="mainsys_customerprompt_cid_id_a42df27e_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+    </index>
+    <index id="178" parent="35" name="mainsys_customerprompt_suno_id_dc154ee9_fk_mainsys_stockup_suno">
+      <ColNames>suno_id</ColNames>
+    </index>
+    <key id="179" parent="35" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>cpromptno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="180" parent="35" name="mainsys_customerprompt_cid_id_a42df27e_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_customer</RefTableName>
+      <RefColNames>cid</RefColNames>
+    </foreign-key>
+    <foreign-key id="181" parent="35" name="mainsys_customerprompt_suno_id_dc154ee9_fk_mainsys_stockup_suno">
+      <ColNames>suno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_stockup</RefTableName>
+      <RefColNames>suno</RefColNames>
+    </foreign-key>
+    <column id="182" parent="36" name="creceiptno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="183" parent="36" name="crdate">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="184" parent="36" name="cpromptno_id">
+      <Position>3</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="185" parent="36" name="mainsys_customerrece_cpromptno_id_74d59bc5_fk_mainsys_c">
+      <ColNames>cpromptno_id</ColNames>
+    </index>
+    <key id="186" parent="36" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>creceiptno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="187" parent="36" name="mainsys_customerrece_cpromptno_id_74d59bc5_fk_mainsys_c">
+      <ColNames>cpromptno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_customerprompt</RefTableName>
+      <RefColNames>cpromptno</RefColNames>
+    </foreign-key>
+    <column id="188" parent="37" name="dno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="189" parent="37" name="dname">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="190" parent="37" name="ddesc">
+      <Position>3</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <key id="191" parent="37" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>dno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="192" parent="38" name="dcno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="193" parent="38" name="dcDesc">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="194" parent="38" name="dcRate">
+      <Position>3</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="195" parent="38" name="dcAbs">
+      <Position>4</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="196" parent="38" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>dcno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="197" parent="39" name="dbno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="198" parent="39" name="dbdate">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="199" parent="39" name="cid_id">
+      <Position>3</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="200" parent="39" name="suno_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="201" parent="39" name="mainsys_dispatchbill_cid_id_a7e7c413_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+    </index>
+    <index id="202" parent="39" name="mainsys_dispatchbill_suno_id_d8fa5266_fk_mainsys_stockup_suno">
+      <ColNames>suno_id</ColNames>
+    </index>
+    <key id="203" parent="39" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>dbno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="204" parent="39" name="mainsys_dispatchbill_cid_id_a7e7c413_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_customer</RefTableName>
+      <RefColNames>cid</RefColNames>
+    </foreign-key>
+    <foreign-key id="205" parent="39" name="mainsys_dispatchbill_suno_id_d8fa5266_fk_mainsys_stockup_suno">
+      <ColNames>suno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_stockup</RefTableName>
+      <RefColNames>suno</RefColNames>
+    </foreign-key>
+    <column id="206" parent="40" name="fid">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="207" parent="40" name="fname">
+      <Position>2</Position>
+      <DataType>varchar(40)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="208" parent="40" name="faddr">
+      <Position>3</Position>
+      <DataType>varchar(40)|0</DataType>
+    </column>
+    <column id="209" parent="40" name="ftel">
+      <Position>4</Position>
+      <DataType>varchar(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="210" parent="40" name="femail">
+      <Position>5</Position>
+      <DataType>varchar(40)|0</DataType>
+    </column>
+    <key id="211" parent="40" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>fid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="212" parent="41" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="213" parent="41" name="quantity">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="214" parent="41" name="occupiedQuat">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="215" parent="41" name="dailyDemand">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="216" parent="41" name="setupCost">
+      <Position>5</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="217" parent="41" name="holdingCost">
+      <Position>6</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="218" parent="41" name="leadTime">
+      <Position>7</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="219" parent="41" name="shortagecost">
+      <Position>8</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="220" parent="41" name="isp">
+      <Position>9</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="221" parent="41" name="level_id">
+      <Position>10</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="222" parent="41" name="mgmtno_id">
+      <Position>11</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="223" parent="41" name="pno_id">
+      <Position>12</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="224" parent="41" name="wno_id">
+      <Position>13</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="225" parent="41" name="mainsys_inventory_level_id_3090f8cf_fk_mainsys_s">
+      <ColNames>level_id</ColNames>
+    </index>
+    <index id="226" parent="41" name="mainsys_inventory_mgmtno_id_6e2e964d_fk_mainsys_i">
+      <ColNames>mgmtno_id</ColNames>
+    </index>
+    <index id="227" parent="41" name="mainsys_inventory_pno_id_wno_id_64040b9c_uniq">
+      <ColNames>pno_id
+wno_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="228" parent="41" name="mainsys_inventory_wno_id_731f2d72_fk_mainsys_warehouse_wno">
+      <ColNames>wno_id</ColNames>
+    </index>
+    <key id="229" parent="41" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="230" parent="41" name="mainsys_inventory_pno_id_wno_id_64040b9c_uniq">
+      <ColNames>pno_id
+wno_id</ColNames>
+      <UnderlyingIndexName>mainsys_inventory_pno_id_wno_id_64040b9c_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="231" parent="41" name="mainsys_inventory_level_id_3090f8cf_fk_mainsys_s">
+      <ColNames>level_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_stocklevel</RefTableName>
+      <RefColNames>invtLevel</RefColNames>
+    </foreign-key>
+    <foreign-key id="232" parent="41" name="mainsys_inventory_mgmtno_id_6e2e964d_fk_mainsys_i">
+      <ColNames>mgmtno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_inventorymgmt</RefTableName>
+      <RefColNames>mgmtno</RefColNames>
+    </foreign-key>
+    <foreign-key id="233" parent="41" name="mainsys_inventory_pno_id_47a0604a_fk_mainsys_product_pno">
+      <ColNames>pno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_product</RefTableName>
+      <RefColNames>pno</RefColNames>
+    </foreign-key>
+    <foreign-key id="234" parent="41" name="mainsys_inventory_wno_id_731f2d72_fk_mainsys_warehouse_wno">
+      <ColNames>wno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_warehouse</RefTableName>
+      <RefColNames>wno</RefColNames>
+    </foreign-key>
+    <column id="235" parent="42" name="mgmtno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="236" parent="42" name="mgmtDesc">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="237" parent="42" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>mgmtno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="238" parent="43" name="pno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="239" parent="43" name="pname">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="240" parent="43" name="gauge">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="241" parent="43" name="cost">
+      <Position>4</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="242" parent="43" name="price">
+      <Position>5</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="243" parent="43" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>pno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="244" parent="44" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="245" parent="44" name="quotation">
+      <Position>2</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="246" parent="44" name="fid_id">
+      <Position>3</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="247" parent="44" name="pno_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="248" parent="44" name="mainsys_productcatalog_fid_id_pno_id_27802400_uniq">
+      <ColNames>fid_id
+pno_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="249" parent="44" name="mainsys_productcatalog_pno_id_2b0a7270_fk_mainsys_product_pno">
+      <ColNames>pno_id</ColNames>
+    </index>
+    <key id="250" parent="44" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="251" parent="44" name="mainsys_productcatalog_fid_id_pno_id_27802400_uniq">
+      <ColNames>fid_id
+pno_id</ColNames>
+      <UnderlyingIndexName>mainsys_productcatalog_fid_id_pno_id_27802400_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="252" parent="44" name="mainsys_productcatalog_fid_id_74b61d05_fk_mainsys_factory_fid">
+      <ColNames>fid_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_factory</RefTableName>
+      <RefColNames>fid</RefColNames>
+    </foreign-key>
+    <foreign-key id="253" parent="44" name="mainsys_productcatalog_pno_id_2b0a7270_fk_mainsys_product_pno">
+      <ColNames>pno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_product</RefTableName>
+      <RefColNames>pno</RefColNames>
+    </foreign-key>
+    <column id="254" parent="45" name="pono">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="255" parent="45" name="podate">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="256" parent="45" name="deliveryDate">
+      <Position>3</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="257" parent="45" name="amount">
+      <Position>4</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="258" parent="45" name="postatus">
+      <Position>5</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="259" parent="45" name="fid_id">
+      <Position>6</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="260" parent="45" name="mainsys_purchasingorder_fid_id_9f8a0416_fk_mainsys_factory_fid">
+      <ColNames>fid_id</ColNames>
+    </index>
+    <key id="261" parent="45" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>pono</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="262" parent="45" name="mainsys_purchasingorder_fid_id_9f8a0416_fk_mainsys_factory_fid">
+      <ColNames>fid_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_factory</RefTableName>
+      <RefColNames>fid</RefColNames>
+    </foreign-key>
+    <column id="263" parent="46" name="podno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="264" parent="46" name="pquant">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="265" parent="46" name="remainder">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="266" parent="46" name="price">
+      <Position>4</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="267" parent="46" name="subAmount">
+      <Position>5</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="268" parent="46" name="dcno_id">
+      <Position>6</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="269" parent="46" name="pno_id">
+      <Position>7</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="270" parent="46" name="pono_id">
+      <Position>8</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="271" parent="46" name="mainsys_purchasingor_dcno_id_05a66447_fk_mainsys_d">
+      <ColNames>dcno_id</ColNames>
+    </index>
+    <index id="272" parent="46" name="mainsys_purchasingor_pno_id_13c9fa87_fk_mainsys_p">
+      <ColNames>pno_id</ColNames>
+    </index>
+    <index id="273" parent="46" name="mainsys_purchasingor_pono_id_ed3e00d9_fk_mainsys_p">
+      <ColNames>pono_id</ColNames>
+    </index>
+    <key id="274" parent="46" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>podno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="275" parent="46" name="mainsys_purchasingor_dcno_id_05a66447_fk_mainsys_d">
+      <ColNames>dcno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_discount</RefTableName>
+      <RefColNames>dcno</RefColNames>
+    </foreign-key>
+    <foreign-key id="276" parent="46" name="mainsys_purchasingor_pno_id_13c9fa87_fk_mainsys_p">
+      <ColNames>pno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_product</RefTableName>
+      <RefColNames>pno</RefColNames>
+    </foreign-key>
+    <foreign-key id="277" parent="46" name="mainsys_purchasingor_pono_id_ed3e00d9_fk_mainsys_p">
+      <ColNames>pono_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_purchasingorder</RefTableName>
+      <RefColNames>pono</RefColNames>
+    </foreign-key>
+    <column id="278" parent="47" name="rno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="279" parent="47" name="rdate">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="280" parent="47" name="rstatus">
+      <Position>3</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="281" parent="47" name="pono_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="282" parent="47" name="mainsys_replenishmen_pono_id_bb913791_fk_mainsys_p">
+      <ColNames>pono_id</ColNames>
+    </index>
+    <key id="283" parent="47" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>rno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="284" parent="47" name="mainsys_replenishmen_pono_id_bb913791_fk_mainsys_p">
+      <ColNames>pono_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_purchasingorder</RefTableName>
+      <RefColNames>pono</RefColNames>
+    </foreign-key>
+    <column id="285" parent="48" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="286" parent="48" name="rdno">
+      <Position>2</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="287" parent="48" name="quat">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="288" parent="48" name="rdStatus">
+      <Position>4</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="289" parent="48" name="pno_id">
+      <Position>5</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="290" parent="48" name="podno_id">
+      <Position>6</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="291" parent="48" name="rno_id">
+      <Position>7</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="292" parent="48" name="wno_id">
+      <Position>8</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="293" parent="48" name="mainsys_replenishmentdetail_rno_id_rdno_97ab7705_uniq">
+      <ColNames>rno_id
+rdno</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="294" parent="48" name="mainsys_replenishmen_pno_id_5102bf5e_fk_mainsys_p">
+      <ColNames>pno_id</ColNames>
+    </index>
+    <index id="295" parent="48" name="mainsys_replenishmen_podno_id_e8e06c6c_fk_mainsys_p">
+      <ColNames>podno_id</ColNames>
+    </index>
+    <index id="296" parent="48" name="mainsys_replenishmen_wno_id_9c74598f_fk_mainsys_w">
+      <ColNames>wno_id</ColNames>
+    </index>
+    <key id="297" parent="48" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="298" parent="48" name="mainsys_replenishmentdetail_rno_id_rdno_97ab7705_uniq">
+      <ColNames>rno_id
+rdno</ColNames>
+      <UnderlyingIndexName>mainsys_replenishmentdetail_rno_id_rdno_97ab7705_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="299" parent="48" name="mainsys_replenishmen_pno_id_5102bf5e_fk_mainsys_p">
+      <ColNames>pno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_product</RefTableName>
+      <RefColNames>pno</RefColNames>
+    </foreign-key>
+    <foreign-key id="300" parent="48" name="mainsys_replenishmen_podno_id_e8e06c6c_fk_mainsys_p">
+      <ColNames>podno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_purchasingorderdetail</RefTableName>
+      <RefColNames>podno</RefColNames>
+    </foreign-key>
+    <foreign-key id="301" parent="48" name="mainsys_replenishmen_rno_id_9cca299f_fk_mainsys_r">
+      <ColNames>rno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_replenishment</RefTableName>
+      <RefColNames>rno</RefColNames>
+    </foreign-key>
+    <foreign-key id="302" parent="48" name="mainsys_replenishmen_wno_id_9c74598f_fk_mainsys_w">
+      <ColNames>wno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_warehouse</RefTableName>
+      <RefColNames>wno</RefColNames>
+    </foreign-key>
+    <column id="303" parent="49" name="sid">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="304" parent="49" name="sname">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="305" parent="49" name="authDesc">
+      <Position>3</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="306" parent="49" name="dept_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="307" parent="49" name="mainsys_staff_dept_id_1714b671_fk_mainsys_department_dno">
+      <ColNames>dept_id</ColNames>
+    </index>
+    <key id="308" parent="49" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>sid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="309" parent="49" name="mainsys_staff_dept_id_1714b671_fk_mainsys_department_dno">
+      <ColNames>dept_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_department</RefTableName>
+      <RefColNames>dno</RefColNames>
+    </foreign-key>
+    <column id="310" parent="50" name="invtLevel">
+      <Position>1</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="311" parent="50" name="levelRate">
+      <Position>2</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="312" parent="50" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>invtLevel</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="313" parent="51" name="suno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="314" parent="51" name="sudate">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="315" parent="51" name="suStatus">
+      <Position>3</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="316" parent="51" name="cid_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="317" parent="51" name="ono_id">
+      <Position>5</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="318" parent="51" name="mainsys_stockup_cid_id_6c21ad81_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+    </index>
+    <index id="319" parent="51" name="mainsys_stockup_ono_id_5d04d8ab_fk_mainsys_customerorder_ono">
+      <ColNames>ono_id</ColNames>
+    </index>
+    <key id="320" parent="51" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>suno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="321" parent="51" name="mainsys_stockup_cid_id_6c21ad81_fk_mainsys_customer_cid">
+      <ColNames>cid_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_customer</RefTableName>
+      <RefColNames>cid</RefColNames>
+    </foreign-key>
+    <foreign-key id="322" parent="51" name="mainsys_stockup_ono_id_5d04d8ab_fk_mainsys_customerorder_ono">
+      <ColNames>ono_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_customerorder</RefTableName>
+      <RefColNames>ono</RefColNames>
+    </foreign-key>
+    <column id="323" parent="52" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="324" parent="52" name="sudno">
+      <Position>2</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="325" parent="52" name="quat">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="326" parent="52" name="sudStatus">
+      <Position>4</Position>
+      <DataType>varchar(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="327" parent="52" name="odno_id">
+      <Position>5</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="328" parent="52" name="pno_id">
+      <Position>6</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="329" parent="52" name="suno_id">
+      <Position>7</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="330" parent="52" name="wno_id">
+      <Position>8</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="331" parent="52" name="mainsys_stockupdetail_pno_id_51a85d05_fk_mainsys_product_pno">
+      <ColNames>pno_id</ColNames>
+    </index>
+    <index id="332" parent="52" name="mainsys_stockupdetail_suno_id_sudno_559b87d6_uniq">
+      <ColNames>suno_id
+sudno</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="333" parent="52" name="mainsys_stockupdetail_wno_id_53436884_fk_mainsys_warehouse_wno">
+      <ColNames>wno_id</ColNames>
+    </index>
+    <index id="334" parent="52" name="mainsys_stockupdetai_odno_id_9d6017c3_fk_mainsys_c">
+      <ColNames>odno_id</ColNames>
+    </index>
+    <key id="335" parent="52" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="336" parent="52" name="mainsys_stockupdetail_suno_id_sudno_559b87d6_uniq">
+      <ColNames>suno_id
+sudno</ColNames>
+      <UnderlyingIndexName>mainsys_stockupdetail_suno_id_sudno_559b87d6_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="337" parent="52" name="mainsys_stockupdetai_odno_id_9d6017c3_fk_mainsys_c">
+      <ColNames>odno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_corderdetail</RefTableName>
+      <RefColNames>odno</RefColNames>
+    </foreign-key>
+    <foreign-key id="338" parent="52" name="mainsys_stockupdetail_pno_id_51a85d05_fk_mainsys_product_pno">
+      <ColNames>pno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_product</RefTableName>
+      <RefColNames>pno</RefColNames>
+    </foreign-key>
+    <foreign-key id="339" parent="52" name="mainsys_stockupdetail_suno_id_948b848c_fk_mainsys_stockup_suno">
+      <ColNames>suno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_stockup</RefTableName>
+      <RefColNames>suno</RefColNames>
+    </foreign-key>
+    <foreign-key id="340" parent="52" name="mainsys_stockupdetail_wno_id_53436884_fk_mainsys_warehouse_wno">
+      <ColNames>wno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_warehouse</RefTableName>
+      <RefColNames>wno</RefColNames>
+    </foreign-key>
+    <column id="341" parent="53" name="spromptno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="342" parent="53" name="freight">
+      <Position>2</Position>
+      <DataType>double|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="343" parent="53" name="spdate">
+      <Position>3</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="344" parent="53" name="rno_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="345" parent="53" name="mainsys_supplierprom_rno_id_d8927cc9_fk_mainsys_r">
+      <ColNames>rno_id</ColNames>
+    </index>
+    <key id="346" parent="53" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>spromptno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="347" parent="53" name="mainsys_supplierprom_rno_id_d8927cc9_fk_mainsys_r">
+      <ColNames>rno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_replenishment</RefTableName>
+      <RefColNames>rno</RefColNames>
+    </foreign-key>
+    <column id="348" parent="54" name="sreceiptno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="349" parent="54" name="srdate">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="350" parent="54" name="spromptno_id">
+      <Position>3</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="351" parent="54" name="mainsys_supplierrece_spromptno_id_b4cc8b12_fk_mainsys_s">
+      <ColNames>spromptno_id</ColNames>
+    </index>
+    <key id="352" parent="54" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>sreceiptno</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="353" parent="54" name="mainsys_supplierrece_spromptno_id_b4cc8b12_fk_mainsys_s">
+      <ColNames>spromptno_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_supplierprompt</RefTableName>
+      <RefColNames>spromptno</RefColNames>
+    </foreign-key>
+    <column id="354" parent="55" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="355" parent="55" name="name">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="356" parent="55" name="password">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="357" parent="55" name="usid_id">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+    </column>
+    <index id="358" parent="55" name="mainsys_user_usid_id_3c787801_fk_mainsys_staff_sid">
+      <ColNames>usid_id</ColNames>
+    </index>
+    <key id="359" parent="55" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="360" parent="55" name="mainsys_user_usid_id_3c787801_fk_mainsys_staff_sid">
+      <ColNames>usid_id</ColNames>
+      <RefSchemaName>AmcNew</RefSchemaName>
+      <RefTableName>mainsys_staff</RefTableName>
+      <RefColNames>sid</RefColNames>
+    </foreign-key>
+    <column id="361" parent="56" name="wno">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="362" parent="56" name="waddr">
+      <Position>2</Position>
+      <DataType>varchar(40)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="363" parent="56" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>wno</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>

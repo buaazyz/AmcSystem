@@ -75,6 +75,7 @@ class Inventory(models.Model):
     # 已备货库存（已被占用库存），冗余
     occupiedQuat = models.IntegerField(default=0)
     dailyDemand = models.IntegerField()
+    demandStd = models.FloatField()
     setupCost = models.FloatField()
     holdingCost = models.FloatField()
     leadTime = models.FloatField()
@@ -85,13 +86,13 @@ class Inventory(models.Model):
     class Meta:
         unique_together = ("pno", "wno")
 
-class Discount(models.Model):
-    dcno = models.CharField(max_length=10, primary_key=True)
-    dcDesc = models.CharField(max_length=100)
-    # 折扣率
-    dcRate = models.FloatField(default=0.0)
-    # 绝对减免金额
-    dcAbs = models.FloatField(default=0.0)
+# class Discount(models.Model):
+#     dcno = models.CharField(max_length=10, primary_key=True)
+#     dcDesc = models.CharField(max_length=100)
+#     # 折扣率
+#     dcRate = models.FloatField(default=0.0)
+#     # 绝对减免金额
+#     dcAbs = models.FloatField(default=0.0)
 
 class CustomerOrder(models.Model):
     ORDER_STATUS = (
@@ -115,7 +116,7 @@ class COrderDetail(models.Model):
     pquat = models.IntegerField()
     # 暂未满足数量，冗余
     remainder = models.IntegerField()
-    dcno = models.ForeignKey(Discount)
+    discount = models.FloatField()
     # 冗余
     subAmount = models.FloatField()
     # class Meta:
@@ -151,7 +152,7 @@ class PurchasingOrderDetail(models.Model):
     # 暂未到货数量，冗余
     remainder = models.IntegerField()
     price = models.FloatField()
-    dcno = models.ForeignKey(Discount)
+    discount = models.FloatField()
     # 冗余
     subAmount = models.FloatField()
     # class Meta:
@@ -233,13 +234,19 @@ class ReplenishmentDetail(models.Model):
         unique_together = ("rno", "rdno")
 
 class CustomerPrompt(models.Model):
+    CUSTOMERPROMPT_STATUS = (
+        ('0', 'Unreceived'),
+        ('1', 'Received')
+    )
     cpromptno = models.CharField(max_length=10, primary_key=True)
     # 对应发货单号
-    suno = models.ForeignKey(StockUp)
+    dbno = models.ForeignKey(DispatchBill)
     # 对应顾客号，冗余
     cid = models.ForeignKey(Customer)
+    amount = models.FloatField()
     freight = models.FloatField()
     cpdate = models.DateField()
+    cpstatus = models.CharField(max_length=1, choices=CUSTOMERPROMPT_STATUS, default='0')
 
 class CustomerReceipt(models.Model):
     creceiptno = models.CharField(max_length=10, primary_key=True)
@@ -248,11 +255,17 @@ class CustomerReceipt(models.Model):
     crdate = models.DateField()
 
 class SupplierPrompt(models.Model):
+    SUPPLIERPROMPT_STATUS = (
+        ('0', 'Unpaid'),
+        ('1', 'Paid')
+    )
     spromptno = models.CharField(max_length=10, primary_key=True)
     # 对应进货单号
     rno = models.ForeignKey(Replenishment)
+    amount = models.FloatField()
     freight = models.FloatField()
     spdate = models.DateField()
+    spstatus = models.CharField(max_length=1, choices=SUPPLIERPROMPT_STATUS, default='0')
 
 class SupplierReceipt(models.Model):
     sreceiptno = models.CharField(max_length=10, primary_key=True)
@@ -264,3 +277,56 @@ class User(models.Model):
     name = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     usid = models.ForeignKey(staff, on_delete=models.CASCADE,null = True)
+
+class SalesReturn(models.Model):
+    SALESRETURN_STATUS = (
+        ('0', 'Incompleted'),
+        ('1', 'Completed')
+    )
+
+    srno = models.CharField(max_length=10, primary_key=True)
+    rno = models.ForeignKey(Replenishment)
+    srdate = models.DateField()
+    srstatus = models.CharField(max_length=1, choices=SALESRETURN_STATUS, default='0')
+
+class SalesReturnDetail(models.Model):
+    srno = models.ForeignKey(SalesReturn)
+    srdno = models.CharField(max_length=10, primary_key=True)
+    rdno = models.ForeignKey(ReplenishmentDetail)
+
+class InventoryAccount(models.Model):
+    INVENTORYACCOUNT_TYPE = (
+        ('-1', 'Out'),
+        ('1', 'In')
+    )
+
+    wno = models.ForeignKey(Warehouse)
+    pno = models.ForeignKey(Product)
+    iatype = models.CharField(max_length=2, choices=INVENTORYACCOUNT_TYPE)
+    quantity = models.IntegerField()
+    iadate = models.DateField()
+    billReference = models.CharField(max_length=10)
+
+class CustomerAccount(models.Model):
+    CUSTOMERACCOUNT_TYPE = (
+        ('0', 'Unreceived'),
+        ('1', 'Received')
+    )
+
+    cid = models.ForeignKey(Customer)
+    catype = models.CharField(max_length=1, choices=CUSTOMERACCOUNT_TYPE)
+    amount = models.FloatField()
+    cadate = models.DateField()
+    billReference = models.CharField(max_length=10)
+
+class SupplierAccount(models.Model):
+    SUPPLIERACCOUNT_TYPE = (
+        ('0', 'Unpaid'),
+        ('1', 'Paid')
+    )
+
+    fid = models.ForeignKey(Factory)
+    satype = models.CharField(max_length=1, choices=SUPPLIERACCOUNT_TYPE)
+    amount = models.FloatField()
+    sadate = models.DateField()
+    billReference = models.CharField(max_length=10)
