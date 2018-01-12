@@ -13,9 +13,12 @@ from django.db.models import Sum
 import json
 import datetime
 from django.core import serializers
+<<<<<<< HEAD
 
 import math
 import scipy.stats
+=======
+>>>>>>> 15c9b716cebfc0704266adb6ccc547c68d86e4e8
 
 # Create your views here.
 
@@ -1148,6 +1151,7 @@ def selectSalesAccountAdvanced(cid, startDate, endDate):
 
     saobj = saobj.values('cadate').annotate(Sum('amount')).order_by('cadate')
 
+<<<<<<< HEAD
     return json.dumps(list(saobj), cls=DjangoJSONEncoder)
 
 ###################
@@ -1203,3 +1207,6 @@ def lowestcost_model(pno, wno):
 def ez_function(isp):
     z = scipy.stats.norm.ppf(isp, 0, 1)
     return scipy.stats.norm.pdf(z, 0, 1) - z * (1-scipy.stats.norm.cdf(z, 0, 1))
+=======
+    return json.dumps(list(saobj), cls=DjangoJSONEncoder)
+>>>>>>> 15c9b716cebfc0704266adb6ccc547c68d86e4e8

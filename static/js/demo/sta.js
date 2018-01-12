@@ -69,8 +69,11 @@ function iaSta()
             text: "",
             type: "warning"
         });
+<<<<<<< HEAD
 
         return;
+=======
+>>>>>>> 15c9b716cebfc0704266adb6ccc547c68d86e4e8
     }
 
     data = {};
