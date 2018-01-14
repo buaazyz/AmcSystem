@@ -13,12 +13,9 @@ from django.db.models import Sum
 import json
 import datetime
 from django.core import serializers
-<<<<<<< HEAD
 
 import math
 import scipy.stats
-=======
->>>>>>> 15c9b716cebfc0704266adb6ccc547c68d86e4e8
 
 # Create your views here.
 
@@ -230,7 +227,7 @@ def updateInventoryLevel(wno, pno):
         elif rate > dangerrate:
             stockobj.level = StockLevel.objects.get(invtLevel='2')
         else:
-            stockobj.level = '3'
+            stockobj.level = StockLevel.objects.get(invtLevel='3')
 
     stockobj.save()
 
@@ -560,7 +557,7 @@ def replenish(req):
                 inventoryobj = Inventory.objects.get(wno=rdobj.wno, pno=rdobj.pno)
                 inventoryobj.quantity = inventoryobj.quantity + replenishQuat
             else:
-                inventoryobj = Inventory(wno=rdobj.wno, pno=rdobj.pno, quantity=replenishQuat, occupiedQuat=0, dailyDemand=0, setupCost=0, holdingCost=0, leadTime=0, shortagecost=0, isp=0.95, mgmtno=InventoryMgmt.objects.get(mgmtno='000'), level=StockLevel.objects.get(invtLevel='0'))
+                inventoryobj = Inventory(wno=rdobj.wno, pno=rdobj.pno, quantity=replenishQuat, occupiedQuat=0, dailyDemand=0, setupCost=0, holdingCost=0, leadTime=0, shortagecost=0, isp=0.95, mgmtno=InventoryMgmt.objects.get(mgmtno='000'), level=StockLevel.objects.get(invtLevel='0'), demandStd=0)
             inventoryobj.save()
             updateInventoryLevel(inventoryobj.wno.wno, inventoryobj.pno.pno)
 
@@ -1151,7 +1148,6 @@ def selectSalesAccountAdvanced(cid, startDate, endDate):
 
     saobj = saobj.values('cadate').annotate(Sum('amount')).order_by('cadate')
 
-<<<<<<< HEAD
     return json.dumps(list(saobj), cls=DjangoJSONEncoder)
 
 ###################
@@ -1207,6 +1203,3 @@ def lowestcost_model(pno, wno):
 def ez_function(isp):
     z = scipy.stats.norm.ppf(isp, 0, 1)
     return scipy.stats.norm.pdf(z, 0, 1) - z * (1-scipy.stats.norm.cdf(z, 0, 1))
-=======
-    return json.dumps(list(saobj), cls=DjangoJSONEncoder)
->>>>>>> 15c9b716cebfc0704266adb6ccc547c68d86e4e8

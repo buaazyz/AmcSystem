@@ -323,7 +323,7 @@ function sudStatus(status)
     else if(status == '1')
         result = '部分备货';
     else
-        result = '完全备货';
+        result = '未备货';
 
     return result;
 }
