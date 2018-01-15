@@ -3,6 +3,19 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render,render_to_response
 from django.template.context import RequestContext
+from django.http import HttpResponse,JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponseRedirect
+from mainsys import models
+
+import statsmodels.tsa.stattools as st
+
+import numpy as np
+import pandas as pd
+import pyflux as pf
+
+from django.shortcuts import render,render_to_response
+from django.template.context import RequestContext
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponseRedirect
@@ -10,9 +23,26 @@ from django.http import HttpResponseRedirect
 from mainsys.models import *
 from django.db.models import Sum
 
+import time
 import json
-import datetime
+import re
 from django.core import serializers
+
+
+import json
+from datetime import datetime, timedelta
+from django.core import serializers
+from django.forms.models import model_to_dict
+
+
+from django.shortcuts import render,render_to_response
+from django.template.context import RequestContext
+from django.http import HttpResponse
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponseRedirect
+
+from mainsys.models import *
+from django.db.models import Sum
 
 import math
 import scipy.stats
@@ -1203,3 +1233,535 @@ def lowestcost_model(pno, wno):
 def ez_function(isp):
     z = scipy.stats.norm.ppf(isp, 0, 1)
     return scipy.stats.norm.pdf(z, 0, 1) - z * (1-scipy.stats.norm.cdf(z, 0, 1))
+
+
+
+
+#################
+# -zyz
+
+def viewCustomer(req):
+    data = {}
+
+    customer = Customer.objects.all().values()
+
+    # datav = serializers.serialize("json", customer)
+
+    datav =  json.dumps(list(customer))
+    data['dat']= datav
+
+    return render_to_response('viewcustomer.html',data,RequestContext(req))
+
+
+
+def addCustomer(req):
+    data = {}
+    print(req.POST.get('cname'))
+
+
+    last = Customer.objects.last()
+    id = re.sub("\D", "",str(last.ono))
+    id = int(id) + 1
+    newid = "C" + str(id)
+
+    newobj = Customer(cid = newid, cname = req.POST.get('cname'),caddr = req.POST.get('caddr'), consignee = req.POST.get('consignee'), conAddr = req.POST.get('conAddr'),ctel = req.POST.get('ctel') ,cemail = req.POST.get('cemail'))
+    newobj.save()
+    customer = Customer.objects.all().values()
+    # datav = serializers.serialize("json", customer)
+
+    datav =  json.dumps(list(customer))
+    data['dat']= datav
+
+    return render_to_response('viewcustomer.html',data,RequestContext(req))
+
+
+def viewCOrder(req):
+    data = {}
+    corder = list(CustomerOrder.objects.all().values())
+
+    # datav = serializers.serialize("json", customer)
+
+    for i in corder:
+        date1 = str(i['odate'])
+        i['odate'] = date1
+        date2 = str(i['deliveryDate'])
+        i['deliveryDate'] = date2
+        if i['ostatus'] == '2' :
+            i['ostatus'] = "已发货"
+        elif i['ostatus'] == '1':
+            i['ostatus'] = "发货暂缺"
+
+        else:
+            i['ostatus'] = "未发货"
+
+    # print(corder[0]['odate'])
+
+    customerlist = list(Customer.objects.all().values('cid'))
+
+    datav =  json.dumps(list(corder))
+    clist = json.dumps(customerlist)
+    data['dat']= datav
+    data['customerlist'] = clist
+    # print(datav)
+    return render_to_response('viewCorder.html',data,RequestContext(req))
+
+def addCOrder(req):
+    data = {}
+    # 添加部分
+    last = CustomerOrder.objects.last()
+    id = re.sub("\D", "",str(last.ono))
+    id = int(id) + 1
+    newid = "CO" + str(id)
+    print(newid)
+    cid = req.POST.get('Cselect')
+    time = req.POST.get('datetime')
+
+    rcustmer = Customer.objects.get(cid=cid)
+
+    # time = time.encode('unicode-escape').decode('string_escape')
+    # didate = datetime.strptime(time, "%Y-%m-%d")
+    odate = datetime.now()
+    # print(odate)
+    newobj = CustomerOrder(ono=newid,odate=odate, deliveryDate=time,cid=rcustmer,amount=0)
+    # newobj.save()
+
+    #查询返回部分
+
+    ono = newid
+
+    orderlist = COrderDetail.objects.filter(ono=ono).all().values()
+
+    datav = json.dumps(list(orderlist))
+    data['dat'] = datav
+    # print(corder[0]['odate'])
+
+    return render_to_response('viewCorderDet.html', data, RequestContext(req))
+
+
+def viewCOrderdetail(req):
+    data = {}
+    ono = req.GET.get('ono')
+
+    orderlist = COrderDetail.objects.filter(ono=ono).all().values()
+
+    pruductlist = list(Product.objects.all().values('pno'))
+    plist = json.dumps(pruductlist)
+    data['pruductlist'] = plist
+
+    datav = json.dumps(list(orderlist))
+    data['dat'] = datav
+    data['ono'] = ono
+
+    return render_to_response('viewCorderDet.html',data,RequestContext(req))
+
+def addCOrderdetail(req):
+    data = {}
+    # 添加部分
+    last = COrderDetail.objects.last()
+    id = re.sub("\D", "",str(last.ono))
+    id = int(id) + 1
+    newodno = "COD" + str(id)
+
+    ono = req.POST.get('ono')
+    pquat = req.POST.get('pquat')
+    remainder = pquat
+    discount = req.POST.get('discount')
+    pno = req.POST.get('Pselect')
+    COrder = CustomerOrder.objects.get(ono = ono)
+
+    # print(ono,pquat,discount,pno)
+
+    pro = Product.objects.get(pno=pno)
+    price = pro.price
+    subAmount = price * int(pquat) * float(discount) * 0.01
+
+
+    newobj = COrderDetail(odno=newodno,ono= COrder,pquat=pquat, pno=pro,remainder=remainder,subAmount=subAmount, discount=discount)
+    newobj.save()
+    updateobj = CustomerOrder.objects.get(ono=ono)
+    amount = updateobj.amount + subAmount
+    CustomerOrder.objects.filter(ono=ono).update(amount=amount)
+
+    #查询返回部分
+
+    orderlist = COrderDetail.objects.filter(ono=ono).all().values()
+    pruductlist = list(Product.objects.all().values('pno'))
+    plist = json.dumps(pruductlist)
+    data['pruductlist'] = plist
+
+
+    datav = json.dumps(list(orderlist))
+    data['dat'] = datav
+    # print(corder[0]['odate'])
+
+    return render_to_response('viewCorderDet.html', data, RequestContext(req))
+
+
+
+#采购方面
+
+def viewFactory(req):
+    data = {}
+
+    factory = Factory.objects.all().values()
+
+
+    datav =  json.dumps(list(factory))
+    data['dat']= datav
+
+    return render_to_response('viewfactory.html',data,RequestContext(req))
+
+
+
+def addFactory(req):
+    data = {}
+    print(req.POST.get('fname'))
+
+
+    last = Factory.objects.last()
+    id = re.sub("\D", "",str(last.ono))
+    id = int(id) + 1
+    newid = str(id)
+
+    newobj = Factory(fid = newid, fname = req.POST.get('fname'),faddr = req.POST.get('faddr'),ftel = req.POST.get('ftel') ,femail = req.POST.get('femail'))
+    newobj.save()
+    factory = Factory.objects.all().values()
+    # datav = serializers.serialize("json", customer)
+
+    datav =  json.dumps(list(factory))
+    data['dat']= datav
+
+    return render_to_response('viewfactory.html',data,RequestContext(req))
+
+
+def viewPOrder(req):
+    data = {}
+    porder = list(PurchasingOrder.objects.all().values())
+
+    # datav = serializers.serialize("json", customer)
+
+    for i in porder:
+        date1 = str(i['podate'])
+        i['podate'] = date1
+        date2 = str(i['deliveryDate'])
+        i['deliveryDate'] = date2
+        if i['postatus'] == '2' :
+            i['postatus'] = "已发货"
+        elif i['postatus'] == '1':
+            i['postatus'] = "发货暂缺"
+
+        else:
+            i['postatus'] = "未发货"
+
+    # print(corder[0]['odate'])
+
+    factorylist = list(Factory.objects.all().values('fid'))
+
+    datav =  json.dumps(list(porder))
+    flist = json.dumps(factorylist)
+    data['dat']= datav
+    data['factorylist'] = flist
+    # print(datav)
+    return render_to_response('viewPOrder.html',data,RequestContext(req))
+
+
+def viewCatalog(req):
+    data = {}
+
+    cata = ProductCatalog.objects.all().values()
+    datav =  json.dumps(list(cata))
+    data['dat']= datav
+
+    factorylist = list(Factory.objects.all().values('fid'))
+    flist = json.dumps(factorylist)
+    data['factorylist'] = flist
+    productlist = list(Product.objects.all().values('pno'))
+    plist = json.dumps(productlist)
+    data['productlist'] = plist
+
+    return render_to_response('viewCatalog.html',data,RequestContext(req))
+
+
+def addCatalog(req):
+    data = {}
+
+    newquo = req.POST.get('newquo')
+    fid = req.POST.get('Fselect')
+    pno = req.POST.get('Pselect')
+
+    newquo = float(newquo)
+    fac = Factory.objects.get(fid=fid)
+    pro = Product.objects.get(pno = pno)
+
+    newPC = ProductCatalog(fid=fac, pno=pro,quotation=newquo)
+    newPC.save()
+    cata = ProductCatalog.objects.all().values()
+    datav = json.dumps(list(cata))
+    data['dat'] = datav
+
+    cata = ProductCatalog.objects.all().values()
+    datav = json.dumps(list(cata))
+    data['dat'] = datav
+
+    factorylist = list(Factory.objects.all().values('fid'))
+    flist = json.dumps(factorylist)
+    data['factorylist'] = flist
+    productlist = list(Product.objects.all().values('pno'))
+    plist = json.dumps(productlist)
+    data['productlist'] = plist
+
+    return render_to_response('viewCatalog.html', data, RequestContext(req))
+
+
+
+def updateQuo(req):
+    data = {}
+
+    newquo = req.GET.get('newquo')
+    fid =  req.GET.get('fid')
+    pno =  req.GET.get('pno')
+
+    ProductCatalog.objects.filter(fid=fid,pno=pno).update(quotation=newquo)
+
+    cata = ProductCatalog.objects.all().values()
+    datav =  json.dumps(list(cata))
+    data['dat']= datav
+    return render_to_response('viewCatalog.html', data, RequestContext(req))
+
+def addPOrder(req):
+    data = {}
+    # 添加部分
+    last = PurchasingOrder.objects.last()
+    id = re.sub("\D", "", str(last.pono))
+    id = int(id) + 1
+    newid = "PO" + str(id)
+    fid = req.POST.get('Fselect')
+    time = req.POST.get('datetime')
+
+    factory = Factory.objects.get(fid=fid)
+    odate = datetime.now()
+    newobj = PurchasingOrder(pono=newid,podate=odate, deliveryDate=time,fid=factory,amount=0, postatus=1)
+    newobj.save()
+
+    #查询返回部分
+
+
+    porder = list(PurchasingOrder.objects.all().values())
+
+    # datav = serializers.serialize("json", customer)
+
+    for i in porder:
+        date1 = str(i['podate'])
+        i['podate'] = date1
+        date2 = str(i['deliveryDate'])
+        i['deliveryDate'] = date2
+        if i['postatus'] == '2':
+            i['postatus'] = "已发货"
+        elif i['postatus'] == '1':
+            i['postatus'] = "发货暂缺"
+
+        else:
+            i['postatus'] = "未发货"
+
+    # print(corder[0]['odate'])
+
+    factorylist = list(Factory.objects.all().values('fid'))
+
+    datav = json.dumps(list(porder))
+    flist = json.dumps(factorylist)
+    data['dat'] = datav
+    data['factorylist'] = flist
+
+    return render_to_response('viewPOrder.html', data, RequestContext(req))
+
+
+def viewPOrderdetail(req):
+    data = {}
+    pono = req.GET.get('pono')
+
+    orderlist = PurchasingOrderDetail.objects.filter(pono=pono).all().values()
+
+    pruductlist = list(Product.objects.all().values('pno'))
+    plist = json.dumps(pruductlist)
+    warelist = list(Warehouse.objects.all().values('wno'))
+    wlist = json.dumps(warelist)
+    data['pruductlist'] = plist
+    data['warelist'] = wlist
+
+    datav = json.dumps(list(orderlist))
+    data['dat'] = datav
+    data['pono'] = pono
+
+    return render_to_response('viewPorderDet.html',data,RequestContext(req))
+
+def addPOrderdetail(req):
+    data = {}
+    # 添加部分
+    last = PurchasingOrderDetail.objects.last()
+    id = re.sub("\D", "",str(last.podno))
+    newid = int(id) + 1
+    newpodno = "POD" + str(newid)
+    print(newpodno)
+    pono = req.POST.get('pono')
+    pquat = req.POST.get('pquat')
+    remainder = pquat
+    discount = req.POST.get('discount')
+    pno = req.POST.get('Pselect')
+
+    POrder = PurchasingOrder.objects.get(pono = pono)
+    pro = Product.objects.get(pno=pno)
+
+    fid = POrder.fid_id
+    quota = ProductCatalog.objects.filter(fid=fid,pno=pno)
+    price = quota[0].quotation
+    print(price)
+    subAmount = price * int(pquat) * float(discount) * 0.01
+
+    newobj = PurchasingOrderDetail(podno=newpodno,pono= POrder,pquant=pquat,price=price, pno=pro,remainder=remainder,subAmount=subAmount, discount=discount)
+    newobj.save()
+    updateobj = PurchasingOrder.objects.get(pono=pono)
+    amount = updateobj.amount + subAmount
+    PurchasingOrder.objects.filter(pono=pono).update(amount=amount)
+
+    #查询返回部分
+
+
+    orderlist = PurchasingOrderDetail.objects.filter(pono=pono).all().values()
+
+    pruductlist = list(Product.objects.all().values('pno'))
+    plist = json.dumps(pruductlist)
+    data['pruductlist'] = plist
+
+    datav = json.dumps(list(orderlist))
+    data['dat'] = datav
+    data['pono'] = pono
+
+    return render_to_response('viewPorderDet.html', data, RequestContext(req))
+
+def ajax_model(req):
+    a =[0]
+    pno = req.POST.get('MPselect')
+    wno = req.POST.get('Wselect')
+    choose = req.POST.get('Mselect')
+
+    if choose == "1":
+        a[0] = eoq_quat(pno,wno)
+    elif choose=="2":
+        a[0] = lowestcost_quat(pno,wno)
+    elif choose=="3":
+       a[0] = arima_model(pno,wno)
+    else:
+        print(0)
+
+    # a[0] = 12314
+    return JsonResponse(a,safe = False)
+
+def arima_model(pno,wno):
+    pro = Product.objects.get(pno=pno)
+    ware = Warehouse.objects.get(wno=wno)
+
+    inlist = InventoryAccount.objects.filter(pno=pro,wno=ware, iatype=-1).values('id','quantity','iadate').order_by('iadate')
+    newlist = list(inlist)
+    for i in newlist:
+        temp = int(i['quantity'])
+        temp = -temp
+        i['quantity'] = temp
+
+    df = pd.DataFrame(newlist)
+    df.index = df['iadate'].values
+
+    order = st.arma_order_select_ic(df['quantity'].values, ic=['aic', 'bic'], trend='nc')
+    ar = order.bic_min_order[0]
+    ma = order.bic_min_order[1]
+
+    model = pf.ARIMA(data=df, ar=ar, ma=ma, integ=0, target='quantity')
+    # print(1234556)
+    x = model.fit("MLE")
+    # x.summary()
+
+    a = model.predict(h=1)
+    nextout = a.values[0][0]
+
+
+    return round(nextout)
+
+
+def displaySupplierPrompt(req):
+    data = {}
+    data['supplierPrompt'] = selectSupplierPrompt()
+    rlist = json.dumps(list(Replenishment.objects.all().values('rno')))
+    data['Rlist'] = rlist
+    return render_to_response('supplierprompt-receipt.html', data, RequestContext(req))
+
+def refreshSupplierPrompt(req):
+    return HttpResponse(selectSupplierPrompt(), content_type='')
+
+def selectSupplierPrompt():
+    cpobj = SupplierPrompt.objects.all().values('spromptno', 'rno', 'amount', 'freight', 'spdate', 'spstatus')
+    return json.dumps(list(cpobj), cls=DjangoJSONEncoder)
+
+def displaySPDetail(req):
+    reqInfo = json.loads(req.POST.get('info'))
+    spromptno = reqInfo['spromptno']
+    # fid = reqInfo['fid']
+
+    return render_to_response('spdetail-receipt.html', selectSPDDict(spromptno), RequestContext(req))
+
+def selectSPDDict(spromptno):
+    data = {}
+    data['supplierPrompt'] = selectSPById(spromptno)
+    data['spdetail'] = selectSPDById(spromptno)
+
+    return data
+
+def selectSPById(spromptno):
+    spobj = SupplierPrompt.objects.filter(spromptno=spromptno).values('spromptno','rno',  'amount', 'freight', 'spdate', 'spstatus')
+    return json.dumps(list(spobj), cls=DjangoJSONEncoder)
+
+def selectSPDById(spromptno):
+    spobj = SupplierPrompt.objects.get(spromptno=spromptno)
+    return selectReplenishmentById(spobj.rno.rno)
+
+def addSupplierPrompt(req):
+    Rselect = req.POST.get('Rselect')
+    amount =req.POST.get('amount')
+    freight = req.POST.get('freight')
+    date = req.POST.get('date')
+
+    last = SupplierPrompt.objects.last()
+    id = re.sub("\D", "", str(last.spromptno))
+    id = int(id) + 1
+    newid = "SPP" + str(id)
+
+    newobj = SupplierPrompt(spromptno=newid, freight=freight, spdate=date,rno_id=Rselect,amount=amount,spstatus=0)
+    newobj.save()
+    return displaySupplierPrompt(req)
+
+# def receiptCP(req):
+#     cpromptno = req.POST.get('msg')
+#
+#     # 修改催款单状态
+#     cpobj = CustomerPrompt.objects.get(cpromptno=cpromptno)
+#     cpobj.cpstatus = '1'
+#     cpobj.save()
+#
+#     # 生成发票
+#     nowdate = datetime.datetime.now().strftime('%Y-%m-%d')
+#     crnum = 1
+#     crcount = CustomerReceipt.objects.count()
+#     if crcount > 0:
+#         lastCr = CustomerReceipt.objects.all()[crcount - 1].creceiptno
+#         crnum = int(lastCr[2:]) + 1
+#     creceiptno = 'CR' + str(crnum)
+#     crobj = CustomerReceipt(creceiptno=creceiptno, cpromptno=cpobj, crdate=nowdate)
+#     crobj.save()
+#
+#     # 登销售业务账
+#     caccountobj = CustomerAccount(cid=cpobj.cid, catype='1', amount=cpobj.amount+cpobj.freight, cadate=nowdate,
+#                                   billReference=creceiptno)
+#     caccountobj.save()
+#
+#     # 返回刷新
+#     data = selectCPDDict(cpromptno, cpobj.cid.cid)
+#
+#     return HttpResponse(json.dumps(data), content_type='')

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>AMC System - 主页</title>
+
+    <meta name="keywords" content="AMC System Mainpage">
+    <meta name="description" content="">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="/static/css/style.css?v=4.1.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox float-e-margins">
+           <div class="ibox-title">
+                <h5>库存模型</h5>
+            </div>
+            <div class="ibox-content">
+        <div class="row">
+                            <div class="col-sm-6 b-r">
+                                <h3 class="m-t-none m-b">请选择模型参数</h3>
+                                <form id="myform"  >
+                                    <div class="form-group">
+                                        <label>产品编码:</label>
+                                        <select id="MPselect" name="MPselect" class="form-control"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>仓库编码:</label>
+                                        <select  id="Wselect" name="Wselect"  class="form-control"></select>
+                                    </div>
+
+                                     <div class="form-group">
+                                        <label>模型选择:</label>
+                                        <select  id="Mselect" name="Mselect" class="form-control">
+                                            <option value="1">EOQ模型</option>
+                                            <option value="2">最小化成本模型</option>
+                                            <option value="3">时间序列模型</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <input type="button"  onclick="ajax()" value="开始计算">
+                                        </input>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-6">
+                                <h4>模型推荐结果</h4>
+                                <br/>
+                                <div class="form-group">
+                                        <label>最优订货量/下期需求量:</label>
+                                        <input  id="result" name="result"  class="form-control" disabled="disabled"></input>
+                                    </div>
+                            </div>
+                        </div>
+
+        </div>
+        </div>
+                        <!-- End Example Toolbar -->
+                    </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox float-e-margins">
+           <div class="ibox-title">
+                <h5>订单项列表</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">选项1</a>
+                        </li>
+                        <li><a href="#">选项2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+        <div class="row row-lg">
+            <div class="col-sm-12">
+                        <!-- Example Toolbar -->
+                        <div class="example-wrap">
+                            <div class="example">
+                                <div class="btn-group hidden-xs" id="exampleToolbar" role="group">
+                                    <button type="button" class="btn btn-outline btn-default" data-toggle="modal" data-target="#myModal">
+                                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                    </button>
+
+                                </div>
+                                <table id="exampleTableToolbar" data-mobile-responsive="true">
+                                </table>
+                            </div>
+                        </div>
+        </div>
+        </div>
+                        <!-- End Example Toolbar -->
+                    </div>
+            </div>
+        </div>
+
+    <div id="myModal" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                            <h3 class="m-t-none m-b">新增订单细节</h3>
+
+                            <form role="form" action="addPOrderdetail" method="post">
+                                <div class="form-group">
+                                    <label>产品编号：</label>
+                                    <select id="Pselect" class="form-control m-b" name="Pselect">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>数量：</label>
+                                    <input name="pquat" type="number" required="required"  class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>折扣：（%）</label>
+                                    <input name="discount" type="number" required="required"  class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input name="pono" value="{{ pono }}"  type="hidden">
+                                </div>
+                            </form>
+                                </div>
+                <div align="center">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+				<button type="submit" class="btn btn-primary">
+					提交更改
+				</button>
+                    </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- 自定义js -->
+    <script src="/static/js/content.js?v=1.0.0"></script>
+    <script src="/static/js/showTable.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+     <!-- Bootstrap table -->
+    <script src="/static/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/static/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/static/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    <!-- Peity -->
+    <script>
+        function ajax() {
+            console.log("123")
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "calculate",
+                data: $('#myform').serialize(),// 你的formid
+                async: true,
+                error: function (request) {
+                    alert("Connection error");
+                },
+                success: function (data) {
+{#                    alert("Connection ");#}
+                    $("#result").val(data[0])
+                }
+            });
+        }
+    </script>
+
+
+
+    <script>
+
+        var temp = {{ dat | safe }};
+
+        $('#exampleTableToolbar').bootstrapTable({
+      data: temp ,
+      search: true,
+      showRefresh: true,
+      showToggle: true,
+      showColumns: true,
+      toolbar: '#exampleToolbar',
+      iconSize: 'outline',
+      icons: {
+        refresh: 'glyphicon-repeat',
+        toggle: 'glyphicon-list-alt',
+        columns: 'glyphicon-list'
+      },
+      columns:[{field:'podno',title:'订单详情编号'},
+          {field:'pquant',title:'订货数量'},
+          {field:'remainder',title:'未发货数量'},
+          {field:'price',title:'采购单价'},
+          {field:'pno_id',title:'订单编号'},
+          {field:'pno_id',title:'产品编号'},
+          {field:'subAmount',title:'产品价值'},
+          {field:'discount',title:'折扣'},
+{#          {field:'button',title:'操作', formatter: operateFormatter, events: operateEvents={#}
+{#            "click #btn_detail":function (e,value,row,index) {#}
+{#               var hr = window.location.href;#}
+{#               console.log(hr);#}
+{#               var newhr = hr + "/getPOrDetail?[ono="+row.pono;#}
+{#               console.log(newhr);#}
+{#               window.location.href = newhr;#}
+{#            }#}
+{#        }#}
+{#          }#}
+      ]
+    });
+        function operateFormatter(value, row, index) {
+        return [
+            '<button id="btn_detail" type="button" class="btn btn-outline btn-default">详情</button>',
+        ].join("");
+        }
+
+    </script>
+
+    <script>
+        (function(){
+
+        var plist = {{ pruductlist | safe }}
+        var wlist = {{ warelist | safe }}
+        for (i in plist){
+            document.getElementById("Pselect").options.add(new Option(plist[i]['pno'], plist[i]['pno']));
+            document.getElementById("MPselect").options.add(new Option(plist[i]['pno'], plist[i]['pno']));
+        }
+         for (i in plist){
+            document.getElementById("Wselect").options.add(new Option(wlist[i]['wno'], wlist[i]['wno']));
+        }
+
+
+
+
+
+
+
+
+
+
+        })()
+</script>
+
+<script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+</body>
+
+</html>

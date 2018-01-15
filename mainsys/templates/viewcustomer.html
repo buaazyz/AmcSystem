@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>AMC System - 主页</title>
+
+    <meta name="keywords" content="AMC System Mainpage">
+    <meta name="description" content="">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="/static/css/style.css?v=4.1.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox float-e-margins">
+           <div class="ibox-title">
+                <h5>客户基本信息</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">选项1</a>
+                        </li>
+                        <li><a href="#">选项2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+        <div class="row row-lg">
+            <div class="col-sm-12">
+                        <!-- Example Toolbar -->
+                        <div class="example-wrap">
+                            <div class="example">
+                                <div class="btn-group hidden-xs" id="exampleToolbar" role="group">
+                                    <button type="button" class="btn btn-outline btn-default" data-toggle="modal" data-target="#myModal">
+                                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                    </button>
+{#                                    <button type="button" class="btn btn-outline btn-default">#}
+{#                                        <i class="glyphicon glyphicon-heart" aria-hidden="true"></i>#}
+{#                                    </button>#}
+{#                                    <button type="button" class="btn btn-outline btn-default">#}
+{#                                        <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>#}
+{#                                    </button>#}
+                                </div>
+                                <table id="exampleTableToolbar" data-mobile-responsive="true">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="cname">公司名称</th>
+                                            <th data-field="caddr">注册地址</th>
+                                            <th data-field="consignee">法人代表</th>
+                                            <th data-field="conAddr">通讯地址</th>
+                                            <th data-field="ctel">联系电话</th>
+                                             <th data-field="cemail">邮箱</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+        </div>
+        </div>
+                        <!-- End Example Toolbar -->
+                    </div>
+            </div>
+        </div>
+
+    <div id="myModal" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                            <h3 class="m-t-none m-b">新增客户信息</h3>
+
+                            <form role="form" action="addCust" method="post">
+                                <div class="form-group">
+                                    <label>客户名称：</label>
+                                    <input name="cname"  required="required" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>联系地址：</label>
+                                    <input name="caddr" required="required"  class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>收货人：</label>
+                                    <input name="consignee"  required="required" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>收货地址：</label>
+                                    <input name="conAddr" required="required" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>联系电话：</label>
+                                    <input name="ctel" required="required"  class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>邮箱：</label>
+                                    <input name="cemail" required="required"  class="form-control">
+                                </div>
+                <div align="center">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+				<button type="submit" class="btn btn-primary">
+					提交更改
+				</button>
+                    </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- 自定义js -->
+    <script src="/static/js/content.js?v=1.0.0"></script>
+    <script src="/static/js/showTable.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+     <!-- Bootstrap table -->
+    <script src="/static/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/static/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/static/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    <!-- Peity -->
+    
+    <script>
+(function(document, window, $) {
+  // Example Bootstrap Table Toolbar
+  // -------------------------------
+  (function() {
+     var temp = {{ dat | safe }};
+    $('#exampleTableToolbar').bootstrapTable({
+      data: temp ,
+      search: true,
+      showRefresh: true,
+      showToggle: true,
+      showColumns: true,
+      toolbar: '#exampleToolbar',
+      iconSize: 'outline',
+      icons: {
+        refresh: 'glyphicon-repeat',
+        toggle: 'glyphicon-list-alt',
+        columns: 'glyphicon-list'
+      }
+    });
+  })();
+})(document, window, jQuery);
+    </script>
+
+<script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+</body>
+
+</html>

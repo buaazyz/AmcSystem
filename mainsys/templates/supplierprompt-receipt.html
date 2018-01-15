@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>AMC - 顾客催款单</title>
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="/static/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>应收管理</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
+                                <i class="fa fa-filter"></i>
+                            </a>
+{#                            <ul class="dropdown-menu dropdown-user" role="menu">#}
+{#                                <li>#}
+{#                                    <div class="checkbox i-checks">#}
+{#                                        <label id="unreceivedCP" value="0" onclick="cpFilter()"><input type="checkbox"> <i></i> 只显示应收催款单</label>#}
+{#                                    </div>#}
+{#                                </li>#}
+{#                            </ul>#}
+                            <a id="refresh">
+                                <i class="glyphicon glyphicon-repeat"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>应付账催款单编号</th>
+                                    <th>入库单编号</th>
+{#                                    <th>顾客编号</th>#}
+{#                                    <th>顾客名称</th>#}
+                                    <th>金额</th>
+                                    <th>运费</th>
+                                    <th>时间</th>
+                                    <th>应付/已付</th>
+                                    <th>查看细节</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supplierPrompt"></tbody>
+                        </table>
+                         <button type="button" class="btn btn-outline btn-default" data-toggle="modal" data-target="#myModal">新增应付账款</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="myModal" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                            <h3 class="m-t-none m-b">新增催款单</h3>
+
+                            <form role="form" action="addSupplierPrompt" method="post">
+                                <div class="form-group">
+                                    <label>入库单编号：</label>
+                                    <select id="Rselect" class="form-control m-b" name="Rselect">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>金额：</label>
+                                    <input name="amount"  required="required"  class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>运费：</label>
+                                    <input name="freight" required="required"  class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>时间：</label>
+                                    <input name="date" type="date" required="required"  class="form-control">
+                                </div>
+{#                                <div class="form-group">#}
+{#                                    <input name="pono" value="{{ pono }}"  type="hidden">#}
+{#                                </div>#}
+
+                                 <div align="center">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+				<button type="submit" class="btn btn-primary">
+					提交
+				</button>
+                    </div>
+                            </form>
+                                </div>
+
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="/static/js/content.js?v=1.0.0"></script>
+    <script src="/static/js/showTable.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+     <!-- Bootstrap table -->
+    <script src="/static/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/static/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/static/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+
+
+
+    <!-- Data Tables -->
+    <script src="/static/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/static/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+
+    <!-- 自定义js -->
+    <script src="/static/js/content.js?v=1.0.0"></script>
+    <script src="/static/js/showTable.js"></script>
+    <script src="/static/js/filter.js"></script>
+
+    <script type="text/javascript">
+        var supplierPromptJson = '{{ supplierPrompt }}';
+        supplierPromptJson = supplierPromptJson.replace(/&quot;/g, '"');
+        displayEditableJson('supplierPrompt', supplierPromptJson, '查看细节', 'btn btn-info ', 'spdetail-receipt', 'fa fa-search');
+    </script>
+
+
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function () {
+            $('.dataTables-example').dataTable();
+
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+            });
+
+            $("#refresh").click(function(){
+                $.get("refreshSupplierPrompt", function(newInfo){
+                    displayEditableJson('supplierPrompt', newInfo, '查看细节', 'btn btn-info ', 'spdetail-receipt', 'fa fa-search')
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        (function(){
+
+        var rlist = {{ Rlist | safe }}
+        for (i in rlist){
+            document.getElementById("Rselect").options.add(new Option(rlist[i]['rno'], rlist[i]['rno']));
+        }
+        })()
+</script>
+
+
+
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <!--统计代码，可删除-->
+</body>
+
+</html>

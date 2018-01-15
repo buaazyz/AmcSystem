@@ -132,6 +132,8 @@ function displayEditableJson(tbodyid, jsonstr, buttonText, buttonClass, link, ic
                 td.innerHTML = srstatus(obj[i][attri]);
             else if(attri == 'cpstatus')
                 td.innerHTML = cpstatus(obj[i][attri]);
+            else if(attri == 'spstatus')
+                td.innerHTML = spstatus(obj[i][attri]);
             else
                 td.innerHTML = obj[i][attri];
 
@@ -394,6 +396,14 @@ function cpstatus(status)
         return '应收';
     else
         return '已收';
+}
+
+function spstatus(status)
+{
+    if(status == '0')
+        return '应付';
+    else
+        return '已付';
 }
 
 function saStatus(status)

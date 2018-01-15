@@ -73,5 +73,32 @@ urlpatterns = [
     url(r'^refreshSalesAccount$', refreshSalesAccount),
     url(r'^saFilter$', salesAccountFilter),
     url(r'^salesSta$', salesSta),
-    url(r'^displaySASta$', displaySASta)
+    url(r'^displaySASta$', displaySASta),
+
+        #---- zyz
+
+    url(r'^viewCust',viewCustomer),
+    url(r'^addCust',addCustomer),
+    url(r'^viewCOrder$',viewCOrder),
+    url(r'^viewCOrder/getCOrDetail',viewCOrderdetail),
+    url(r'^addCOrder$',addCOrder),
+    url(r'^viewCOrder/addCOderdetail',addCOrderdetail),
+
+    url(r'^viewFact',viewFactory),
+    url(r'^addFact',addFactory),
+    url(r'^viewPOrder$',viewPOrder),
+    url(r'^viewCatalog$',viewCatalog),
+    url(r'^addCatalog$',addCatalog),
+    url(r'^viewCatalog/updatequo',updateQuo),
+    url(r'^addPOrder',addPOrder),
+    url(r'^viewPOrder/getPOrDetail',viewPOrderdetail),
+    url(r'^viewPOrder/addPOrderdetail',addPOrderdetail),
+    url(r'^viewPOrder/calculate',ajax_model),
+
+    url(r'^supplierprompt-receipt$', displaySupplierPrompt),
+    url(r'^addSupplierPrompt', addSupplierPrompt),
+    url(r'^refreshSupplierPrompt$', refreshSupplierPrompt),
+    url(r'^spdetail-receipt$', displaySPDetail)
+
+
 ]
